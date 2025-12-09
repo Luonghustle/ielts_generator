@@ -22,12 +22,18 @@ node scripts/generate-reading.js data/sample-reading.json dist/demo.html
 
 ## Using the browser UI
 
-1. Serve the repo locally so the browser can fetch the template file (for example):
+**Option A: double-click (file://, fully offline)**
+1. Open `tool.html` directly.
+2. If the template cannot load, use the **Template** file picker to select `template/base-reading.html`.
+3. Paste JSON or click **Load sample** (built-in fallback sample works even on file://).
+4. Click **Generate file** to preview and download the output HTML.
+
+**Option B: serve locally**
+1. Start a tiny server so the template is fetched automatically:
    - `python -m http.server 8000` (Python 3), then open `http://localhost:8000/tool.html`
    - or `npx serve` from the repo root if you already have Node.
-2. Open `tool.html`.
-3. Paste JSON or click **Load sample**.
-4. Hit **Generate file** to download the ready-to-use HTML (preview is shown inline).
+2. Paste JSON or click **Load sample**.
+3. Click **Generate file** to preview and download the output HTML.
 
 ## JSON shape (essentials)
 
