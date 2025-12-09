@@ -1,0 +1,447 @@
+{
+    "test_id":  "reading-2025-12-09-01",
+    "title":  "The Importance of Business Cards / The Importance of Law / The Voynich Manuscript",
+    "parts":  [
+                  {
+                      "part":  1,
+                      "name":  "Part 1",
+                      "instructions":  "Read the passage and answer Questions 1–13.",
+                      "passage":  {
+                                      "title":  "The Importance of Business Cards",
+                                      "paragraphs":  [
+                                                         "The exchanging of business cards is as close to a universal ritual as you can find in the business world. The ritual may be universal, but the design of business cards and how they are swapped vary across countries. Architects have their artistic cards; lawyers like it black; the Japanese make the exchange of cards an informal ceremony. While there are cards for the deceased, and obituaries are often crammed full of cards and tributes. Some business people hand out 24-carat gold cards, and there are cards for kindergarten children with not only the new contact details, but also the job descriptions of their parents and even grandparents. This practice has become so common in parts of New York, for example, that the use of such cards is now prohibited by some of the area\u0027s institutions.",
+                                                         "Cards have been around a long time, in one form or another. The Chinese invented the paper notice to give people notice that they intended to pay them a visit, but these were for social purposes only. Later in the 17th century, European businesspeople invented a new type of card to act as miniature advertisements. In today\u0027s world, business cards can cause people to have strong reactions ranging from hatred to embarrassment and respect. However, only very few changes can provoke more heated discussions among people more interested in social norms than functionality than the swapping of business cards.",
+                                                         "Lots of companies try to promote themselves by designing the card. Employees at one famous toy company gave out little plastic figures containing contact details stamped on them. One fast-food company has business cards which are shaped like a portion of French fries. A Canadian flower shop once gave each customer a wooden card to redeem in their store for one of their bouquets. For many business commentators, such gimmicky business cards prove that the use of paper cards will ultimately come to an end. After all, why bother exchanging bits of thick paper at all when you can simply swap electronic versions by smartphone?",
+                                                         "However, one can just as well argue the opposite: that business cards have a lot to say, and in a business world full of meetings and correspondence, it is more important than ever that your card is noticed. Attempts to reinvent business cards for the digital age have not been successful. Even all the latest technology will not help people get selected after handing out a little rectangle of paper rather than using a digital file format.",
+                                                         "The traditional business card is necessary to understand how business works. Business cards are thriving in a digital age. It is a powerful reminder that there is much about business that is timeless. According to Kate Jones, a business lecturer, there is one element and inescapable issue. Her 2006 study of more than 200 business executives in North America found that it was the key element for running a successful business. You need to be able to look someone in the eye and shake their hand and see what sort of person they are. In this way, you can transform acquaintanceships into relationships. A good proportion of business life will always be about building social connections – having dinner or playing sport with clients and colleagues – and while computers can deal with administrative tasks, it is still human skills that have to function on another level.",
+                                                         "The rapid advance of globalisation means that this relationship-building process is becoming ever more demanding. Managers have to put more effort into dealing with international counterparts, especially when there is not a common language, which is so often the case these days. A recent UK survey showed that chief executives of global organisations must routinely spend three out of every four weeks on international travel. It is in these situations that business cards are doubly useful as they are a quick way of establishing connections. Cards can also remind you that you have actually met someone in a face-to-face meeting rather than just searched for them on the internet. Looking through piles of different cards can enhance your memory in ways that simply looking through old-time electronic lists would never do.",
+                                                         "Janet McIntyre is a leading expert on business cards in today\u0027s world. She maintains that as companies become more complex, cards are essential in determining the exact status of every contact you meet in multinational corporations. Janet also explains how exchanging business cards can be an effective way of initiating a conversation because it gives people a ritual to follow when they first meet a new business contact. The business world is obsessed with the idea of creating and inventing new things that will change the way we do everything, and this does lead to progress. But there are lots of things that do not need to be changed and in Janet McIntyre\u0027s view, tradition also has an equally valuable role to play. Therefore, the practice of exchanging business cards is likely to continue in the business world."
+                                                     ]
+                                  },
+                      "question_groups":  [
+                                              {
+                                                  "type":  "TFNG",
+                                                  "instructions":  null,
+                                                  "questions":  [
+                                                                    {
+                                                                        "number":  1,
+                                                                        "statement":  "Children’s business cards have been banned in some kindergartens.",
+                                                                        "answer":  "TRUE"
+                                                                    },
+                                                                    {
+                                                                        "number":  2,
+                                                                        "statement":  "It was the Chinese who first began the practice of using business cards.",
+                                                                        "answer":  "FALSE"
+                                                                    },
+                                                                    {
+                                                                        "number":  3,
+                                                                        "statement":  "Designing business cards can be a controversial process for some companies.",
+                                                                        "answer":  "TRUE"
+                                                                    },
+                                                                    {
+                                                                        "number":  4,
+                                                                        "statement":  "A famous toy company has boosted their sales using one type of unusual business card.",
+                                                                        "answer":  "NOT GIVEN"
+                                                                    },
+                                                                    {
+                                                                        "number":  5,
+                                                                        "statement":  "Some business commentators predict a decline in the use of paper business cards.",
+                                                                        "answer":  "TRUE"
+                                                                    }
+                                                                ]
+                                              },
+                                              {
+                                                  "type":  "SUMMARY_COMPLETION",
+                                                  "instructions":  null,
+                                                  "paragraphs":  [
+                                                                     "How business works – Kate Jones’s research: The most important aspect of business is having {{6}} in others. {{7}} do not have the ability to establish the good relationships essential to business.",
+                                                                     "Business and globalisation: Managers must work harder when they don’t share the same {{8}} with their contacts. A UK survey indicates that {{9}} takes up the largest part of business leaders’ time. A business person’s {{10}} of a meeting can be improved by looking at business cards.",
+                                                                     "Janet McIntyre: Business cards clearly show the {{11}} of each person in a large company. The ritual of swapping business cards is a good way of starting a {{12}} at the beginning of a business relationship. Janet feels that in the business world, {{13}} is just as important as innovation."
+                                                                 ],
+                                                  "answers":  [
+                                                                  {
+                                                                      "number":  6,
+                                                                      "answer":  "trust"
+                                                                  },
+                                                                  {
+                                                                      "number":  7,
+                                                                      "answer":  "computers"
+                                                                  },
+                                                                  {
+                                                                      "number":  8,
+                                                                      "answer":  "language"
+                                                                  },
+                                                                  {
+                                                                      "number":  9,
+                                                                      "answer":  "travel"
+                                                                  },
+                                                                  {
+                                                                      "number":  10,
+                                                                      "answer":  "memory"
+                                                                  },
+                                                                  {
+                                                                      "number":  11,
+                                                                      "answer":  "status"
+                                                                  },
+                                                                  {
+                                                                      "number":  12,
+                                                                      "answer":  "conversation"
+                                                                  },
+                                                                  {
+                                                                      "number":  13,
+                                                                      "answer":  "tradition"
+                                                                  }
+                                                              ]
+                                              }
+                                          ]
+                  },
+                  {
+                      "part":  2,
+                      "name":  "Part 2",
+                      "instructions":  "Read the passage and answer Questions 14–26.",
+                      "passage":  {
+                                      "title":  "The Importance of Law",
+                                      "paragraphs":  [
+                                                         "The law influences all of us virtually all the time; it governs almost all aspects of our behaviour, and even what happens to us when we are no longer alive. It affects us from the embryo onwards. It governs the air we breathe, the food and drink we consume, our travel, family relationships, and our property. It applies at the bottom of the ocean and in space. Each time we examine a label on a food product, engage in work as an employee or employer, travel on the roads, go to school to learn or to teach, stay in a hotel, borrow a library book, create or dissolve a commercial company, play sports, or engage the services of someone for anything from plumbing a sink to planning a city, we are in the world of law.",
+                                                         "Law has also become much more widely recognised as the standard by which behaviour needs to be judged. A very telling development in recent history is the way in which the idea of law has permeated all parts of social life. The universal standard of whether something is socially tolerated is progressively becoming whether it is legal, rather than something that has always been considered acceptable. In earlier times, most people were illiterate. Today, by contrast, a vast number of people can read, and it is becoming easier for people to take an interest in law, and for the general population to help actually shape the law in many countries. However, law is a versatile instrument that can be used equally well for the improvement or the degradation of humanity.",
+                                                         "This, of course, puts law in a very significant position. In our rapidly developing world, all sorts of skills and knowledge are valuable. Those people, for example, with knowledge of computers, the internet, and communications technology are relied upon by the rest of us. There is now someone with IT skills or an IT help desk in every UK school, every company, every hospital, every local and central government office. Without their knowledge, many parts of commercial and social life today would seize up in minutes. But legal understanding is just as vital and as universally needed. As one comedian put it, we are all throwing the dice, playing the game, moving our pieces around the board, but if there is a problem, the lawyer is the only person who has read the inside of the top of the box.",
+                                                         "The number of laws has never been greater. In the UK alone, about 35 new Acts of Parliament are produced every year, thereby delivering thousands of new rules. The legislative output of the British Parliament has more than doubled in recent times from around 1,100 pages a year in the early 1970s to over 2,500 pages a year today. Between 1997 and 2006, the legislature passed 365 Acts of Parliament and more than 32,000 legally binding statutory instruments. In a system with so much law, lawyers do a great deal not just to vindicate the rights of citizens and organisations but also to help develop the law through legal arguments, some of which are adapted by judges to become laws. Law courts can and do produce new law and revise old law, but they do so having heard the arguments of lawyers.",
+                                                         "However, despite their important role in developing the rules, lawyers are not universally admired. Anti-lawyer jokes have a long history going back to the ancient Greeks. More recently, the son of a famous Hollywood actor was asked at his junior school what his father did for a living, to which he replied, ‘My daddy is a movie actor, and sometimes he plays the good guy, and sometimes he plays the lawyer.’ For balance, though, it is worth remembering that there are and have been many heroic and revered lawyers such as the Roman philosopher and politician Cicero and Mahatma Gandhi, the Indian campaigner for independence.",
+                                                         "People sometimes make comments that characterise lawyers as professionals whose concerns put personal reward above truth, or who gain financially from misfortune. There are undoubtedly lawyers that would fit that bill, just as there are some scientists, journalists and others in that category. But, in general, it is no more just to say that lawyers are bad because they make a living from people’s problems than it is to make the same accusation in respect of nurses or IT consultants. A great many lawyers are involved in public law work, such as that involving civil liberties, housing and other issues. Such work is not lavishly remunerated and the quality of the service provided by these lawyers relies on considerable professional dedication. Moreover, much legal work has nothing to do with conflict or misfortune, but is primarily concerned with drafting documents. Another source of social disaffection for lawyers, and disaffection for the law, is a limited public understanding of how law works and how it could be changed. Greater clarity about these issues, maybe as a result of better public relations, would reduce many aspects of public dissatisfaction with the law."
+                                                     ]
+                                  },
+                      "question_groups":  [
+                                              {
+                                                  "type":  "MATCH_OPTIONS",
+                                                  "instructions":  null,
+                                                  "options_title":  "List of Headings",
+                                                  "options_list_style":  "lower-roman",
+                                                  "options":  [
+                                                                  {
+                                                                      "label":  "i",
+                                                                      "text":  "Different areas of professional expertise"
+                                                                  },
+                                                                  {
+                                                                      "label":  "ii",
+                                                                      "text":  "Reasons why it is unfair to criticise lawyers"
+                                                                  },
+                                                                  {
+                                                                      "label":  "iii",
+                                                                      "text":  "The disadvantages of the legal system"
+                                                                  },
+                                                                  {
+                                                                      "label":  "iv",
+                                                                      "text":  "The law applies throughout our lives"
+                                                                  },
+                                                                  {
+                                                                      "label":  "v",
+                                                                      "text":  "The law has affected historical events"
+                                                                  },
+                                                                  {
+                                                                      "label":  "vi",
+                                                                      "text":  "A negative regard for lawyers"
+                                                                  },
+                                                                  {
+                                                                      "label":  "vii",
+                                                                      "text":  "Public\u0027s increasing ability to influence the law"
+                                                                  },
+                                                                  {
+                                                                      "label":  "viii",
+                                                                      "text":  "Growth in laws"
+                                                                  }
+                                                              ],
+                                                  "questions":  [
+                                                                    {
+                                                                        "number":  14,
+                                                                        "prompt":  "Paragraph A",
+                                                                        "answer":  "iv"
+                                                                    },
+                                                                    {
+                                                                        "number":  15,
+                                                                        "prompt":  "Paragraph B",
+                                                                        "answer":  "vii"
+                                                                    },
+                                                                    {
+                                                                        "number":  16,
+                                                                        "prompt":  "Paragraph C",
+                                                                        "answer":  "i"
+                                                                    },
+                                                                    {
+                                                                        "number":  17,
+                                                                        "prompt":  "Paragraph D",
+                                                                        "answer":  "viii"
+                                                                    },
+                                                                    {
+                                                                        "number":  18,
+                                                                        "prompt":  "Paragraph E",
+                                                                        "answer":  "vi"
+                                                                    },
+                                                                    {
+                                                                        "number":  19,
+                                                                        "prompt":  "Paragraph F",
+                                                                        "answer":  "ii"
+                                                                    }
+                                                                ]
+                                              },
+                                              {
+                                                  "type":  "MCQ",
+                                                  "subtype":  "single",
+                                                  "instructions":  null,
+                                                  "questions":  [
+                                                                    {
+                                                                        "number":  20,
+                                                                        "question_text":  "Which statement does the writer make about legal skills?",
+                                                                        "options":  [
+                                                                                        {
+                                                                                            "label":  "A",
+                                                                                            "text":  "There should be a person with legal training in every hospital."
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "B",
+                                                                                            "text":  "Lawyers with commercial expertise are most in demand."
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "C",
+                                                                                            "text":  "Knowledge of the law is as important as computer skills."
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "D",
+                                                                                            "text":  "Society could not function effectively without legal experts."
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "E",
+                                                                                            "text":  "Schools should teach students about the law."
+                                                                                        }
+                                                                                    ],
+                                                                        "answer":  "C"
+                                                                    },
+                                                                    {
+                                                                        "number":  21,
+                                                                        "question_text":  "Which statement does the writer make about legal skills?",
+                                                                        "options":  [
+                                                                                        {
+                                                                                            "label":  "A",
+                                                                                            "text":  "There should be a person with legal training in every hospital."
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "B",
+                                                                                            "text":  "Lawyers with commercial expertise are most in demand."
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "C",
+                                                                                            "text":  "Knowledge of the law is as important as computer skills."
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "D",
+                                                                                            "text":  "Society could not function effectively without legal experts."
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "E",
+                                                                                            "text":  "Schools should teach students about the law."
+                                                                                        }
+                                                                                    ],
+                                                                        "answer":  "D"
+                                                                    }
+                                                                ]
+                                              },
+                                              {
+                                                  "type":  "SUMMARY_COMPLETION",
+                                                  "instructions":  null,
+                                                  "paragraphs":  [
+                                                                     "Lawyers as professionals: People sometimes say that {{22}} is of little interest to lawyers, who are more concerned with making money. This may be true for some, in the same way that some {{23}} or scientific experts may be motivated by greed. Criticising lawyers for dealing with people\u0027s problems would be similar to criticising IT staff or {{24}}.",
+                                                                     "Many lawyers work on issues such as housing or civil liberties, which require {{25}}. Much of their time is spent drafting {{26}} instead of dealing with misfortune."
+                                                                 ],
+                                                  "answers":  [
+                                                                  {
+                                                                      "number":  22,
+                                                                      "answer":  "truth"
+                                                                  },
+                                                                  {
+                                                                      "number":  23,
+                                                                      "answer":  "journalists"
+                                                                  },
+                                                                  {
+                                                                      "number":  24,
+                                                                      "answer":  "nurses"
+                                                                  },
+                                                                  {
+                                                                      "number":  25,
+                                                                      "answer":  "dedication"
+                                                                  },
+                                                                  {
+                                                                      "number":  26,
+                                                                      "answer":  "documents"
+                                                                  }
+                                                              ]
+                                              }
+                                          ]
+                  },
+                  {
+                      "part":  3,
+                      "name":  "Part 3",
+                      "instructions":  "Read the passage and answer Questions 27–40.",
+                      "passage":  {
+                                      "title":  "The Voynich Manuscript",
+                                      "paragraphs":  [
+                                                         "The starkly modern Beinecke Library at Yale University is home to some of the most valuable books in the world: first folios of Shakespeare, Gutenberg Bibles and manuscripts from the early Middle Ages. Yet the library’s most controversial possession is an unprepossessing vellum manuscript about the size of a hardback book, containing 240-odd pages of drawings and text of unknown age and authorship. Catalogued as MS408, the manuscript would attract little attention were it not for the fact that the drawings hint at esoteric knowledge, while the text seems to be some sort of code – one that no-one has been able to break. It is known to scholars as the Voynich manuscript, after the American book dealer Wilfrid Voynich, who bought it from a Jesuit college in Italy in 1912.",
+                                                         "Over the years, the manuscript has attracted the attention of everyone from amateur dabblers to top codebreakers, all determined to succeed where countless others have failed. Academic research papers, books and websites are devoted to making sense of the contents of the manuscript, which are freely available to all. “Most other mysteries involve second-hand reports,” says Dr Gordon Rugg of Keele University, a leading Voynich expert. “But this is one that you can see for yourself.”",
+                                                         "It is certainly strange: page after page of drawings of weird plants, astrological symbolism and human figures, accompanied by a script that looks like some form of shorthand. What does it say and what are the drawings about? Voynich himself believed that the manuscript was the work of the 13th-century English monk Roger Bacon, famed for his knowledge of alchemy, philosophy and science. In 1921 Voynich’s view that Bacon was the writer appeared to win support from the work of William Newbold, a philosophy professor who claimed to have found the key to the cipher used by Bacon. According to Newbold, the manuscript proved that Bacon had access to a microscope centuries before it was supposedly invented. The claim caused a sensation, but later researchers showed Newbold’s decoding to be without foundation.",
+                                                         "The Voynich manuscript has continued to defy the efforts of world-class experts. In 1944, a team led by William Friedman began analysing the relative frequencies of the characters in the text, looking for signs of an underlying structure. Yet the precise size of the manuscript’s “alphabet” was unclear; more than 70 distinct symbols could be identified. Moreover, Friedman noted that some words appeared far more frequently than expected in a standard language, casting doubt on the idea that the manuscript concealed a real language, since encryption typically reduces word-frequency patterns.",
+                                                         "Friedman concluded that “Voynichese” was likely an artificial language, constructed from concepts rather than true linguistic roots. Many scholars respect this view, but note that it still leaves unanswered questions about the identity of the author and the meaning of the strange illustrations. Friedman also predicted that major insights would come from computers—a prediction that has proven true, as modern computational methods continue to reveal new clues about the manuscript’s structure.",
+                                                         "In 2001, Dr Gabriel Landini used spectral analysis to show that the manuscript contains patterns consistent with genuine words. However, in 2002, Ren Zandbergen demonstrated through entropy analysis that the text also aligns with artificial-language structures. These conflicting findings deepened the mystery instead of resolving it.",
+                                                         "Some researchers believe the manuscript cannot be a hoax, arguing that a medieval forger could not have created so many subtle linguistic and structural features. But Gordon Rugg challenged this assumption using a 16th-century Cardan grille technique, demonstrating that he could generate text resembling Voynichese quickly and convincingly. Rugg did not claim the manuscript was a forgery—only that creating something so complex was feasible with simple tools. Today, scholars remain divided: some suspect the manuscript holds real meaning; others believe the author may have been mentally unstable. Everyone agrees, however, that the Voynich manuscript remains one of history’s most fascinating unsolved puzzles."
+                                                     ]
+                                  },
+                      "question_groups":  [
+                                              {
+                                                  "type":  "TFNG",
+                                                  "instructions":  null,
+                                                  "questions":  [
+                                                                    {
+                                                                        "number":  27,
+                                                                        "statement":  "It is uncertain when the Voynich manuscript was written.",
+                                                                        "answer":  "TRUE"
+                                                                    },
+                                                                    {
+                                                                        "number":  28,
+                                                                        "statement":  "Wilfrid Voynich donated the manuscript to the Beinecke Library.",
+                                                                        "answer":  "NOT GIVEN"
+                                                                    },
+                                                                    {
+                                                                        "number":  29,
+                                                                        "statement":  "Interest in the Voynich manuscript extends beyond that of academics and professional codebreakers.",
+                                                                        "answer":  "TRUE"
+                                                                    },
+                                                                    {
+                                                                        "number":  30,
+                                                                        "statement":  "The text of the Voynich manuscript contains just under 70 symbols.",
+                                                                        "answer":  "FALSE"
+                                                                    }
+                                                                ]
+                                              },
+                                              {
+                                                  "type":  "MATCH_OPTIONS",
+                                                  "instructions":  null,
+                                                  "options_title":  "List of People",
+                                                  "options_list_style":  "upper-alpha",
+                                                  "options":  [
+                                                                  {
+                                                                      "label":  "A",
+                                                                      "text":  "Gordon Rugg"
+                                                                  },
+                                                                  {
+                                                                      "label":  "B",
+                                                                      "text":  "Roger Bacon"
+                                                                  },
+                                                                  {
+                                                                      "label":  "C",
+                                                                      "text":  "William Newbold"
+                                                                  },
+                                                                  {
+                                                                      "label":  "D",
+                                                                      "text":  "William Friedman"
+                                                                  },
+                                                                  {
+                                                                      "label":  "E",
+                                                                      "text":  "Rob Churchill"
+                                                                  },
+                                                                  {
+                                                                      "label":  "F",
+                                                                      "text":  "Gabriel Landini"
+                                                                  },
+                                                                  {
+                                                                      "label":  "G",
+                                                                      "text":  "Ren Zandbergen"
+                                                                  },
+                                                                  {
+                                                                      "label":  "H",
+                                                                      "text":  "Girolamo Cardano"
+                                                                  }
+                                                              ],
+                                                  "questions":  [
+                                                                    {
+                                                                        "number":  31,
+                                                                        "prompt":  "Some word frequencies make an authentic language unlikely.",
+                                                                        "answer":  "D"
+                                                                    },
+                                                                    {
+                                                                        "number":  32,
+                                                                        "prompt":  "People can directly view the manuscript for themselves.",
+                                                                        "answer":  "A"
+                                                                    },
+                                                                    {
+                                                                        "number":  33,
+                                                                        "prompt":  "The author of the manuscript may have been mentally unstable.",
+                                                                        "answer":  "E"
+                                                                    },
+                                                                    {
+                                                                        "number":  34,
+                                                                        "prompt":  "The author may be the same historical figure suggested by Voynich.",
+                                                                        "answer":  "C"
+                                                                    }
+                                                                ]
+                                              },
+                                              {
+                                                  "type":  "SUMMARY_COMPLETION",
+                                                  "instructions":  null,
+                                                  "paragraphs":  [
+                                                                     "William Newbold believed the author had seen cells using a {{35}}. William Friedman argued the manuscript used an artificial language based on {{36}}, and believed the {{37}} would lead to progress in deciphering it.",
+                                                                     "Gabriel Landini used {{38}} to study the text, while Gordon Rugg used a grille system to produce text appearing in a {{39}}."
+                                                                 ],
+                                                  "answers":  [
+                                                                  {
+                                                                      "number":  35,
+                                                                      "answer":  "microscope"
+                                                                  },
+                                                                  {
+                                                                      "number":  36,
+                                                                      "answer":  "concepts"
+                                                                  },
+                                                                  {
+                                                                      "number":  37,
+                                                                      "answer":  "computer"
+                                                                  },
+                                                                  {
+                                                                      "number":  38,
+                                                                      "answer":  "spectral analysis"
+                                                                  },
+                                                                  {
+                                                                      "number":  39,
+                                                                      "answer":  "table"
+                                                                  }
+                                                              ]
+                                              },
+                                              {
+                                                  "type":  "MCQ",
+                                                  "subtype":  "single",
+                                                  "instructions":  null,
+                                                  "questions":  [
+                                                                    {
+                                                                        "number":  40,
+                                                                        "question_text":  "The writer’s main aim in this passage is to",
+                                                                        "options":  [
+                                                                                        {
+                                                                                            "label":  "A",
+                                                                                            "text":  "explain the meaning of the manuscript"
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "B",
+                                                                                            "text":  "determine the true identity of the author"
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "C",
+                                                                                            "text":  "describe attempts to decode the manuscript"
+                                                                                        },
+                                                                                        {
+                                                                                            "label":  "D",
+                                                                                            "text":  "identify which research gained the most attention"
+                                                                                        }
+                                                                                    ],
+                                                                        "answer":  "C"
+                                                                    }
+                                                                ]
+                                              }
+                                          ]
+                  }
+              ]
+}

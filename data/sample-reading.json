@@ -1,0 +1,163 @@
+{
+  "test_id": "sample-reading-01",
+  "title": "IELTS Reading Sample - Generator Demo",
+  "parts": [
+    {
+      "part": 1,
+      "name": "Part 1",
+      "instructions": "Read the text and answer questions 1-5.",
+      "passage": {
+        "title": "City Parks Comeback",
+        "paragraphs": [
+          "After years of budget cuts, the local council asked residents what they wanted from their green spaces. The answers were surprisingly consistent: shade, space to move, and somewhere that felt safe. By the time the first park reopened, benches faced the playground instead of the parking lot, and new lighting made evening walks possible.",
+          "A small team of volunteers kept the gardens watered during the first dry summer. Among them was Liem, a retired engineer who had campaigned to replace concrete with native grasses. He argued that plants adapted to the climate would thrive without constant irrigation."
+        ]
+      },
+      "question_groups": [
+        {
+          "type": "TFNG",
+          "instructions": "<p><strong>Questions 1-3</strong><br>Do the following statements agree with the information given in Reading Passage 1?</p><p>In boxes 1-3 on your answer sheet, write TRUE, FALSE or NOT GIVEN.</p>",
+          "questions": [
+            {
+              "number": 1,
+              "statement": "Residents wanted the benches to stay next to the car park.",
+              "answer": "FALSE"
+            },
+            {
+              "number": 2,
+              "statement": "New lighting allowed people to use the park later in the day.",
+              "answer": "TRUE"
+            },
+            {
+              "number": 3,
+              "statement": "The council planted exotic flowers to attract more visitors.",
+              "answer": "NOT GIVEN"
+            }
+          ]
+        },
+        {
+          "type": "MATCH_OPTIONS",
+          "instructions": "<p><strong>Questions 4-5</strong><br>Match each person with their contribution.</p><p>Choose the correct letter A-C.</p>",
+          "options_title": "List of People",
+          "options": [
+            { "label": "A", "text": "Mai, landscape student" },
+            { "label": "B", "text": "Liem, retired engineer" },
+            { "label": "C", "text": "An, lighting contractor" }
+          ],
+          "questions": [
+            {
+              "number": 4,
+              "prompt": "proposed using drought-resistant plants",
+              "answer": "B"
+            },
+            {
+              "number": 5,
+              "prompt": "designed a safer layout for footpaths",
+              "answer": "A"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "part": 2,
+      "name": "Part 2",
+      "instructions": "Read the text and answer questions 6-9.",
+      "passage": {
+        "title": "Rooftop Harvests",
+        "paragraphs": [
+          "<strong>A</strong>  Small rooftop farms now cover the older apartment blocks near the river. Residents swap seeds, compare soil mixes and share water barrels. The goal is not profit but resilience: fresh herbs and vegetables when supply chains stumble.",
+          "<strong>B</strong>  The roofs also collect data. Moisture sensors report to a simple dashboard, letting growers see when a crop needs more shade cloth or irrigation. The arrangement convinced sceptical building owners that plants would not damage their roofs."
+        ]
+      },
+      "question_groups": [
+        {
+          "type": "MATCH_HEADINGS",
+          "instructions": "<p><strong>Questions 6-7</strong><br>Choose the correct heading for paragraphs A-B from the list below.</p>",
+          "options_title": "List of Headings",
+          "options_list_style": "lower-roman",
+          "options": [
+            { "label": "i", "text": "Sharing tools and knowledge" },
+            { "label": "ii", "text": "Monitoring moisture with technology" },
+            { "label": "iii", "text": "Protecting old roofs from heavy rain" }
+          ],
+          "questions": [
+            { "number": 6, "prompt": "Paragraph A", "answer": "i" },
+            { "number": 7, "prompt": "Paragraph B", "answer": "ii" }
+          ]
+        },
+        {
+          "type": "SUMMARY_COMPLETION",
+          "instructions": "<p><strong>Questions 8-9</strong><br>Complete the summary below using NO MORE THAN TWO WORDS for each answer.</p>",
+          "paragraphs": [
+            "The pilot garden replaced {{8}} parking spots and added {{9}} small ponds."
+          ],
+          "answers": [
+            { "number": 8, "answer": "thirty" },
+            { "number": 9, "answer": ["two", "2"] }
+          ]
+        }
+      ]
+    },
+    {
+      "part": 3,
+      "name": "Part 3",
+      "instructions": "Read the text and answer questions 10-14.",
+      "passage": {
+        "title": "Future of Work",
+        "paragraphs": [
+          "When office workers stayed home during the pandemic, many teams discovered that productivity did not collapse. Some leaders worried that culture would fade, but weekly check-ins and deliberate mentoring filled part of the gap.",
+          "Now companies are mixing approaches. New graduates often want time in the office to learn informally, while experienced staff ask for flexible schedules. The most successful experiments blend quiet focus days with structured collaboration."
+        ]
+      },
+      "question_groups": [
+        {
+          "type": "YNNG",
+          "instructions": "<p><strong>Questions 10-11</strong><br>Do the following statements agree with the views of the writer in Reading Passage 3?</p>",
+          "questions": [
+            {
+              "number": 10,
+              "statement": "Team output fell sharply when employees first stayed home.",
+              "answer": "NO"
+            },
+            {
+              "number": 11,
+              "statement": "Some mentoring continued even without a physical office.",
+              "answer": "YES"
+            }
+          ]
+        },
+        {
+          "type": "MCQ",
+          "instructions": "<p><strong>Question 12</strong><br>Choose the correct letter, A, B, C or D.</p>",
+          "questions": [
+            {
+              "number": 12,
+              "question_text": "What do many new graduates want from office time?",
+              "options": [
+                { "label": "A", "text": "quieter schedules" },
+                { "label": "B", "text": "informal learning" },
+                { "label": "C", "text": "strict supervision" },
+                { "label": "D", "text": "shorter weeks" }
+              ],
+              "answer": "B"
+            }
+          ]
+        },
+        {
+          "type": "SUMMARY_COMPLETION_BOX",
+          "instructions": "<p><strong>Questions 13-14</strong><br>Choose TWO words from the box to complete the sentences.</p>",
+          "word_bank": ["remote", "coaching", "automation", "coworking"],
+          "paragraphs": [
+            "Some teams shifted to {{13}} days while others met in {{14}} hubs."
+          ],
+          "answers": [
+            { "number": 13, "answer": "remote" },
+            { "number": 14, "answer": "coworking" }
+          ],
+          "dnd_group": "summary-3"
+        }
+      ]
+    }
+  ]
+}

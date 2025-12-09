@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Reading HTML Generator</title>
+    <style>
+        :root {
+            --bg: #0f172a;
+            --panel: #111827;
+            --accent: #38bdf8;
+            --muted: #cbd5e1;
+            --border: #1f2937;
+            --success: #22c55e;
+            --error: #f87171;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.08), transparent 25%), var(--bg);
+            color: #e2e8f0;
+        }
+        header {
+            padding: 20px 24px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            background: rgba(15, 23, 42, 0.9);
+            backdrop-filter: blur(6px);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        header h1 {
+            margin: 0;
+            font-size: 20px;
+            letter-spacing: 0.3px;
+        }
+        main {
+            padding: 24px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 16px;
+        }
+        .card {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+        }
+        .card h2 {
+            margin-top: 0;
+            font-size: 16px;
+            letter-spacing: 0.2px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 260px;
+            background: #0b1220;
+            color: #e2e8f0;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 12px;
+            font-family: "Fira Code", "Consolas", monospace;
+            font-size: 14px;
+            line-height: 1.5;
+            resize: vertical;
+        }
+        button {
+            background: linear-gradient(135deg, #38bdf8, #60a5fa);
+            color: #0b1220;
+            border: none;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform 0.08s ease, box-shadow 0.2s ease;
+        }
+        button:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3); }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .stack { display: flex; flex-direction: column; gap: 10px; }
+        .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #0b1220;
+            border: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 13px;
+        }
+        .status {
+            margin: 0;
+            font-size: 13px;
+            color: var(--muted);
+        }
+        .status.success { color: var(--success); }
+        .status.error { color: var(--error); }
+        .link {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 600;
+        }
+        iframe {
+            width: 100%;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            min-height: 220px;
+            background: #ffffff;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>IELTS Reading HTML Generator</h1>
+        <div class="pill">Local &amp; offline · uses template/base-reading.html</div>
+    </header>
+    <main>
+        <section class="card stack">
+            <h2>1) Paste or load JSON</h2>
+            <textarea id="json-input" spellcheck="false" placeholder="Paste your JSON here..."></textarea>
+            <div class="row">
+                <input type="file" id="file-input" accept=".json">
+                <button id="load-sample">Load sample</button>
+                <span class="status" id="json-status"></span>
+            </div>
+        </section>
+
+        <section class="card stack">
+            <h2>2) Generate HTML</h2>
+            <div class="row">
+                <button id="generate-btn">Generate file</button>
+                <span class="status" id="template-status">Template: loading…</span>
+            </div>
+            <p class="status" id="result-status"></p>
+            <div class="row" id="download-row" style="display:none;">
+                <a id="download-link" class="link" download>Download generated file</a>
+            </div>
+            <iframe id="preview-frame" title="Preview" hidden></iframe>
+        </section>
+
+        <section class="card stack">
+            <h2>JSON tips</h2>
+            <ul style="margin: 0 0 0 16px; color: var(--muted); line-height: 1.6;">
+                <li>Keep question numbers unique and sequential across all parts.</li>
+                <li>Use <code>{{number}}</code> placeholders inside summaries to create blanks.</li>
+                <li><strong>Supported types</strong>: TFNG, YNNG, MCQ, MATCH_OPTIONS, MATCH_HEADINGS, SUMMARY_COMPLETION, SUMMARY_COMPLETION_BOX, SENTENCE_COMPLETION.</li>
+                <li>Put your JSON files in <code>data/</code> to keep things tidy.</li>
+            </ul>
+        </section>
+    </main>
+
+    <script src="scripts/generator.js"></script>
+    <script>
+        (function() {
+            const jsonInput = document.getElementById('json-input');
+            const fileInput = document.getElementById('file-input');
+            const generateBtn = document.getElementById('generate-btn');
+            const loadSampleBtn = document.getElementById('load-sample');
+            const resultStatus = document.getElementById('result-status');
+            const templateStatus = document.getElementById('template-status');
+            const jsonStatus = document.getElementById('json-status');
+            const downloadLink = document.getElementById('download-link');
+            const downloadRow = document.getElementById('download-row');
+            const previewFrame = document.getElementById('preview-frame');
+
+            let templateHtml = '';
+
+            const setStatus = (el, message, tone = 'info') => {
+                el.textContent = message;
+                el.classList.remove('success', 'error');
+                if (tone === 'success') el.classList.add('success');
+                if (tone === 'error') el.classList.add('error');
+            };
+
+            async function loadTemplate() {
+                try {
+                    const res = await fetch('template/base-reading.html');
+                    templateHtml = await res.text();
+                    setStatus(templateStatus, 'Template ready (template/base-reading.html)', 'success');
+                } catch (err) {
+                    setStatus(templateStatus, 'Could not load template. Please serve this folder via a local server.', 'error');
+                }
+            }
+
+            async function loadSample() {
+                try {
+                    const res = await fetch('data/sample-reading.json');
+                    const data = await res.json();
+                    jsonInput.value = JSON.stringify(data, null, 2);
+                    setStatus(jsonStatus, 'Loaded sample-reading.json', 'success');
+                } catch (err) {
+                    setStatus(jsonStatus, 'Failed to load sample file.', 'error');
+                }
+            }
+
+            function handleFile(event) {
+                const file = event.target.files?.[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = () => {
+                    jsonInput.value = reader.result;
+                    setStatus(jsonStatus, `Loaded ${file.name}`, 'success');
+                };
+                reader.onerror = () => setStatus(jsonStatus, 'Could not read file.', 'error');
+                reader.readAsText(file);
+            }
+
+            function generateHtml() {
+                if (!templateHtml) {
+                    setStatus(resultStatus, 'Template not loaded yet.', 'error');
+                    return;
+                }
+                try {
+                    const data = JSON.parse(jsonInput.value);
+                    const { html } = window.IeltsGenerator.renderFromJson(data, templateHtml);
+                    const blob = new Blob([html], { type: 'text/html' });
+                    const url = URL.createObjectURL(blob);
+                    downloadLink.href = url;
+                    downloadLink.download = `${data.test_id || 'reading-output'}.html`;
+                    downloadRow.style.display = 'flex';
+                    previewFrame.hidden = false;
+                    previewFrame.src = url;
+                    setStatus(resultStatus, `Generated ${data.test_id || 'reading-output'}.html`, 'success');
+                } catch (err) {
+                    setStatus(resultStatus, err.message || 'Failed to generate file.', 'error');
+                }
+            }
+
+            fileInput.addEventListener('change', handleFile);
+            loadSampleBtn.addEventListener('click', loadSample);
+            generateBtn.addEventListener('click', generateHtml);
+            loadTemplate();
+        })();
+    </script>
+</body>
+</html>
