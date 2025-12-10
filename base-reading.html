@@ -2591,7 +2591,7 @@
                 if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
                     const range = selection.getRangeAt(0);
                     if (panels.some(panel => panel.contains(range.commonAncestorContainer))) {
-                        selectedRange = range;
+                        selectedRange = range.cloneRange();
                         targetElementForClear = null;
                     }
                 }
@@ -2636,22 +2636,8 @@
                 }
             };
 
-            const openMenuForSelection = () => {
-                if (!selectedRange || selectedRange.collapsed || !selectedRange.toString().trim()) return;
-                const rect = selectedRange.getBoundingClientRect();
-                const syntheticEvent = {
-                    preventDefault: () => {},
-                    target: rect,
-                    pageX: rect.left + window.scrollX + rect.width / 2,
-                    pageY: rect.top + window.scrollY
-                };
-                showContextMenu(syntheticEvent);
-            };
-
             panels.forEach(panel => {
                 panel.addEventListener('contextmenu', showContextMenu);
-                panel.addEventListener('mouseup', () => setTimeout(openMenuForSelection, 0));
-                panel.addEventListener('keyup', () => setTimeout(openMenuForSelection, 0));
             });
 
             document.addEventListener('click', (e) => {
@@ -2664,7 +2650,6 @@
         function closeContextMenu() {
             contextMenu.style.display = 'none';
             contextMenu.targetElementForClear = null;
-            selectedRange = null; // Clear range after menu closes
         }
 
         function unwrapElement(element) {
@@ -2677,12 +2662,61 @@
             parent.normalize();
         }
 
+        function applyRangeHighlight(range, className, noteText) {
+            if (!range || range.collapsed) return;
+
+            const intersectsNode = (r, node) => {
+                if (typeof r.intersectsNode === 'function') {
+                    try { return r.intersectsNode(node); } catch (e) { /* fall through */ }
+                }
+                const nodeRange = document.createRange();
+                nodeRange.selectNodeContents(node);
+                return !(r.compareBoundaryPoints(Range.END_TO_START, nodeRange) <= 0 ||
+                         r.compareBoundaryPoints(Range.START_TO_END, nodeRange) >= 0);
+            };
+
+            const walker = document.createTreeWalker(
+                range.commonAncestorContainer,
+                NodeFilter.SHOW_TEXT,
+                {
+                    acceptNode: (node) => {
+                        if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
+                        return intersectsNode(range, node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+                    }
+                }
+            );
+
+            const nodes = [];
+            while (walker.nextNode()) nodes.push(walker.currentNode);
+
+            nodes.forEach(node => {
+                const start = (node === range.startContainer) ? range.startOffset : 0;
+                const end = (node === range.endContainer) ? range.endOffset : node.length;
+                if (start >= end) return;
+
+                const subRange = document.createRange();
+                subRange.setStart(node, start);
+                subRange.setEnd(node, end);
+
+                const wrapper = document.createElement('span');
+                wrapper.className = className;
+                if (noteText) {
+                    const tooltip = document.createElement('span');
+                    tooltip.className = 'comment-tooltip';
+                    tooltip.textContent = noteText;
+                    wrapper.appendChild(tooltip);
+                }
+
+                const frag = subRange.extractContents();
+                wrapper.insertBefore(frag, wrapper.firstChild);
+                subRange.insertNode(wrapper);
+                subRange.detach();
+            });
+        }
+
         window.highlightText = () => {
             if (selectedRange && !selectedRange.collapsed) {
-                const span = document.createElement('span');
-                span.className = 'highlight';
-                span.appendChild(selectedRange.extractContents());
-                selectedRange.insertNode(span);
+                applyRangeHighlight(selectedRange, 'highlight');
             }
             closeContextMenu();
             window.getSelection().removeAllRanges();
@@ -2691,14 +2725,7 @@
         window.addNote = () => {
             const note = prompt('Enter your note:');
             if (note && selectedRange && !selectedRange.collapsed) {
-                const span = document.createElement('span');
-                span.className = 'comment-highlight';
-                const tooltip = document.createElement('span');
-                tooltip.className = 'comment-tooltip';
-                tooltip.textContent = note;
-                span.appendChild(selectedRange.extractContents());
-                span.appendChild(tooltip);
-                selectedRange.insertNode(span);
+                applyRangeHighlight(selectedRange, 'comment-highlight', note);
             }
             closeContextMenu();
             window.getSelection().removeAllRanges();
