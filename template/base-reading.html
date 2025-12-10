@@ -516,6 +516,22 @@
             border-color: #dc3545;
         }
 
+        function getActiveRange() {
+            const selection = window.getSelection();
+            if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
+                return selection.getRangeAt(0).cloneRange();
+            }
+            if (selectedRange && selectedRange.toString().trim().length > 0) {
+                return selectedRange.cloneRange();
+            }
+            return null;
+        }
+
+        .subQuestion.marked {
+            position: relative;
+            color: #333;
+        }
+
         .subQuestion:hover {
             background-color: #f0f0f0;
             border-color: #999;
@@ -531,6 +547,24 @@
             background-color: #28a745;
             color: white;
             border-color: #28a745;
+        }
+
+        .subQuestion.marked.active {
+            box-shadow: 0 0 0 2px #f0c000;
+        }
+
+        .subQuestion.marked::after {
+            content: "";
+            position: absolute;
+            top: -6px;
+            right: -6px;
+            width: 14px;
+            height: 18px;
+            background: #ffd400;
+            border: 1px solid #d49b00;
+            border-radius: 2px 2px 0 0;
+            clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
+            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
         }
 
         .sr-only {
@@ -978,6 +1012,94 @@
         .tf-options {
             padding-left: 5px;
         }
+
+        .markable-question {
+            position: relative;
+        }
+        .question-number-with-mark {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-right: 10px;
+        }
+        .question-number-with-mark .tf-question-number,
+        .question-number-with-mark .question-number-box {
+            margin-right: 0;
+        }
+        .mark-toggle-btn {
+            width: 26px;
+            height: 26px;
+            border: none;
+            background: transparent;
+            padding: 0;
+            margin-left: 4px;
+            cursor: pointer;
+            opacity: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            transition: opacity 0.2s ease, transform 0.2s ease;
+            color: #777;
+        }
+        .question-number-with-mark:hover .mark-toggle-btn,
+        .markable-blank-wrapper:hover .mark-toggle-btn.inside-blank,
+        .markable-blank-wrapper:focus-within .mark-toggle-btn.inside-blank,
+        .mark-toggle-btn:focus-visible,
+        .mark-toggle-btn.marked {
+            opacity: 1;
+        }
+        .mark-toggle-btn:focus-visible {
+            outline: 2px solid #f0c000;
+            outline-offset: 2px;
+        }
+        .markable-blank-wrapper {
+            position: relative;
+            display: inline-block;
+        }
+        .markable-blank-wrapper input.answer-input,
+        .markable-blank-wrapper .summary-drop-zone,
+        .markable-blank-wrapper .drop-zone {
+            padding-right: 28px !important;
+            position: relative;
+            z-index: 1;
+        }
+        .mark-toggle-btn.inside-blank {
+            position: absolute;
+            right: 6px;
+            top: 50%;
+            transform: translateY(-50%);
+            opacity: 0;
+            width: 18px;
+            height: 18px;
+            color: #777;
+            z-index: 2;
+        }
+        .markable-blank-wrapper:hover .mark-toggle-btn.inside-blank,
+        .markable-blank-wrapper:focus-within .mark-toggle-btn.inside-blank,
+        .mark-toggle-btn.inside-blank.marked {
+            opacity: 1;
+        }
+        .mark-toggle-btn.inside-blank svg {
+            width: 16px;
+            height: 16px;
+        }
+        .mark-toggle-btn svg {
+            width: 22px;
+            height: 22px;
+            stroke: currentColor;
+            fill: none;
+            stroke-width: 2;
+        }
+        .mark-toggle-btn:hover {
+            color: #444;
+        }
+        .mark-toggle-btn.marked {
+            color: #d49b00;
+        }
+        .mark-toggle-btn.marked svg {
+            fill: #ffd400;
+            stroke: #b37b00;
+        }
         .tf-option {
             display: block;
             margin-bottom: 12px;
@@ -1287,7 +1409,7 @@
 <body>
     <div class="header">
         <div class="timer-container">
-            <span class="timer-display">60:00</span>
+            <span class="timer-display">60 minutes remaining</span>
             <div class="timer-controls">
                 <button id="timer-toggle-btn" title="Pause/Resume Timer">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>
@@ -1793,9 +1915,13 @@
         let selectedRange = null;
         let timeInSeconds = 3600;
         let timerInterval;
+        let hasSubmitted = false;
         let draggedItem = null;
         let activeQuestionElement = null;
         let selectedDragItem = null;
+        const markedQuestions = new Set();
+        const markButtons = new Map();
+        const COUNTDOWN_THRESHOLD = 300;
 
         // --- DOM ELEMENTS ---
         const timerDisplay = document.querySelector('.timer-display');
@@ -1810,6 +1936,7 @@
         // --- ICON SVGs ---
         const playIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>';
         const pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
+        const bookmarkIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16l-6-4-6 4z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path></svg>';
 
         // --- INITIALIZATION ---
         function initialize() {
@@ -1842,11 +1969,14 @@
 
             resizer.addEventListener('mousedown', initResize, false);
             initializeContextMenu();
+            initializeQuestionMarkers();
         }
 
         // --- CORE TEST LOGIC ---
 
         function checkAnswers() {
+            if (hasSubmitted) return;
+            hasSubmitted = true;
             // Disable all inputs to prevent changes
             const allInputs = document.querySelectorAll('input, select, textarea');
             allInputs.forEach(input => {
@@ -1858,6 +1988,8 @@
             deliverButton.style.cursor = 'not-allowed';
             
             clearInterval(timerInterval);
+            timerInterval = null;
+            timerToggleButton.innerHTML = playIcon;
             let score = 0;
             const resultsDetailsContainer = document.getElementById('results-details');
             resultsDetailsContainer.innerHTML = '';
@@ -2364,17 +2496,36 @@
         
         // --- MISC HELPERS ---
         
-        function startTimer() {
-            if (timerInterval) clearInterval(timerInterval); // Ensure no multiple intervals
-            timerInterval = setInterval(() => {
-                timeInSeconds--;
-                const minutes = Math.floor(timeInSeconds / 60);
-                const seconds = timeInSeconds % 60;
+        function updateTimerDisplay() {
+            const displaySeconds = Math.max(timeInSeconds, 0);
+            if (displaySeconds > COUNTDOWN_THRESHOLD) {
+                const minutesRemaining = Math.ceil(displaySeconds / 60);
+                timerDisplay.textContent = `${minutesRemaining} minutes remaining`;
+            } else {
+                const minutes = Math.floor(displaySeconds / 60);
+                const seconds = displaySeconds % 60;
                 timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+            }
+        }
+
+        function handleTimeExpired() {
+            timeInSeconds = 0;
+            updateTimerDisplay();
+            clearInterval(timerInterval);
+            timerInterval = null;
+            timerToggleButton.innerHTML = playIcon;
+            checkAnswers();
+        }
+
+        function startTimer() {
+            if (hasSubmitted) return;
+            if (timerInterval) clearInterval(timerInterval); // Ensure no multiple intervals
+            updateTimerDisplay();
+            timerInterval = setInterval(() => {
+                timeInSeconds = Math.max(timeInSeconds - 1, 0);
+                updateTimerDisplay();
                 if (timeInSeconds <= 0) {
-                    clearInterval(timerInterval);
-                    timerDisplay.textContent = "Time's up!";
-                    // checkAnswers(); // Disabled to prevent modal from opening automatically.
+                    handleTimeExpired();
                 }
             }, 1000);
             timerToggleButton.innerHTML = pauseIcon;
@@ -2382,12 +2533,12 @@
 
         function pauseTimer() {
             clearInterval(timerInterval);
+            timerInterval = null;
             timerToggleButton.innerHTML = playIcon;
         }
 
         function toggleTimer() {
-            // Check based on the icon currently displayed
-            if (timerToggleButton.innerHTML.includes('M6 19h4V5H6v14z')) { // Check for pause icon shape
+            if (timerInterval) {
                 pauseTimer();
             } else {
                 startTimer();
@@ -2398,7 +2549,6 @@
             timeInSeconds = 3600;
             updateTimerDisplay();
             startTimer();
-            timerToggleButton.innerHTML = pauseIcon;
         }
         
         function setupCheckboxLimits() {
@@ -2435,14 +2585,14 @@
             const panels = [passagePanel, questionsPanel];
             let targetElementForClear = null;
 
-            // This listener simply tracks the last valid text selection in either panel.
+            // Track last valid selection within panels
             document.addEventListener('selectionchange', () => {
                 const selection = window.getSelection();
                 if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
                     const range = selection.getRangeAt(0);
                     if (panels.some(panel => panel.contains(range.commonAncestorContainer))) {
                         selectedRange = range;
-                        targetElementForClear = null; // New selection overrides clearing a specific element
+                        targetElementForClear = null;
                     }
                 }
             });
@@ -2465,7 +2615,8 @@
                     document.getElementById('menu-highlight').style.display = 'flex';
                     document.getElementById('menu-note').style.display = 'flex';
                     document.getElementById('menu-clear').style.display = 'none';
-                    document.getElementById('menu-clear-all').style.display = 'block'; // Always show clear all
+                    document.getElementById('menu-clear-all').style.display = 'block';
+                    contextMenu.targetElementForClear = null;
                     showMenu = true;
                 }
 
@@ -2485,8 +2636,22 @@
                 }
             };
 
+            const openMenuForSelection = () => {
+                if (!selectedRange || selectedRange.collapsed || !selectedRange.toString().trim()) return;
+                const rect = selectedRange.getBoundingClientRect();
+                const syntheticEvent = {
+                    preventDefault: () => {},
+                    target: rect,
+                    pageX: rect.left + window.scrollX + rect.width / 2,
+                    pageY: rect.top + window.scrollY
+                };
+                showContextMenu(syntheticEvent);
+            };
+
             panels.forEach(panel => {
                 panel.addEventListener('contextmenu', showContextMenu);
+                panel.addEventListener('mouseup', () => setTimeout(openMenuForSelection, 0));
+                panel.addEventListener('keyup', () => setTimeout(openMenuForSelection, 0));
             });
 
             document.addEventListener('click', (e) => {
@@ -2498,6 +2663,7 @@
 
         function closeContextMenu() {
             contextMenu.style.display = 'none';
+            contextMenu.targetElementForClear = null;
             selectedRange = null; // Clear range after menu closes
         }
 
@@ -2552,6 +2718,101 @@
             closeContextMenu();
             window.getSelection().removeAllRanges();
         };
+
+        // --- QUESTION MARKING ---
+
+        function findQuestionAnchor(qNum) {
+            const tfNumber = Array.from(document.querySelectorAll('.tf-question-number')).find(el => parseInt(el.textContent, 10) === qNum);
+            if (tfNumber) return tfNumber;
+
+            const strongLabel = Array.from(document.querySelectorAll(`label[for="q${qNum}"] strong`)).find(el => /^\d+$/.test(el.textContent.trim()));
+            if (strongLabel) return strongLabel;
+
+            const genericLabel = document.querySelector(`label[for="q${qNum}"]`);
+            if (genericLabel) return genericLabel;
+
+            const textInput = document.getElementById(`q${qNum}`);
+            if (textInput) return textInput;
+
+            const summaryBlank = document.querySelector(`.summary-drop-zone[data-q-start="${qNum}"]`);
+            if (summaryBlank) return summaryBlank;
+
+            return null;
+        }
+
+        function createMarkerButton(anchor, qNum) {
+            if (!anchor || anchor.closest('.question-number-with-mark') || anchor.closest('.markable-blank-wrapper')) return null;
+            const isInput = anchor.tagName === 'INPUT';
+            const isSummaryBlank = anchor.classList?.contains('summary-drop-zone') || anchor.classList?.contains('drop-zone');
+            const isInlineBlank = isInput || isSummaryBlank;
+
+            const wrapper = document.createElement('span');
+            wrapper.dataset.questionNumber = qNum;
+            const parent = anchor.parentNode;
+            if (!parent) return null;
+
+            if (isInlineBlank) {
+                wrapper.className = 'markable-blank-wrapper';
+                parent.insertBefore(wrapper, anchor);
+                wrapper.appendChild(anchor);
+            } else {
+                wrapper.className = 'question-number-with-mark';
+                const displayMode = window.getComputedStyle(anchor).display;
+                if (displayMode === 'block' || displayMode === 'flex') {
+                    wrapper.style.display = 'flex';
+                    wrapper.style.alignItems = 'center';
+                }
+                parent.insertBefore(wrapper, anchor);
+                wrapper.appendChild(anchor);
+            }
+
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = isInlineBlank ? 'mark-toggle-btn inside-blank' : 'mark-toggle-btn';
+            button.dataset.questionNumber = qNum;
+            button.setAttribute('aria-label', `Đánh dấu câu ${qNum}`);
+            button.innerHTML = bookmarkIcon;
+            button.addEventListener('click', (e) => {
+                e.stopPropagation();
+                toggleMark(qNum);
+            });
+            wrapper.appendChild(button);
+
+            const markHost = wrapper.closest('.tf-question, .matching-form-row, .matching-question-item, .question, .drag-drop-question, .summary-question, .paragraph-matching-question') || wrapper;
+            markHost.classList.add('markable-question');
+
+            markButtons.set(qNum, button);
+            return button;
+        }
+
+        function initializeQuestionMarkers() {
+            for (let i = 1; i <= totalQuestions; i++) {
+                const anchor = findQuestionAnchor(i);
+                createMarkerButton(anchor, i);
+            }
+        }
+
+        function toggleMark(qNum) {
+            const isMarked = markedQuestions.has(qNum);
+            if (isMarked) {
+                markedQuestions.delete(qNum);
+            } else {
+                markedQuestions.add(qNum);
+            }
+            updateMarkState(qNum, !isMarked);
+        }
+
+        function updateMarkState(qNum, marked) {
+            const btn = markButtons.get(qNum);
+            if (btn) {
+                btn.classList.toggle('marked', marked);
+                btn.setAttribute('aria-pressed', marked ? 'true' : 'false');
+            }
+            const navButton = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
+            if (navButton) {
+                navButton.classList.toggle('marked', marked);
+            }
+        }
 
         function updateAttemptedCount(part, startQ, endQ) {
             let answeredCount = 0;
