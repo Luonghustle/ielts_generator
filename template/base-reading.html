@@ -2670,45 +2670,81 @@
             });
         }
 
-        function cleanupFragment(fragment, type) {
+        function unwrapAnnotationsInRange(range, type) {
             const selector = type === 'highlight'
                 ? `.${ANNOTATION_CLASSES.highlight}`
                 : `.${ANNOTATION_CLASSES.highlight}, .${ANNOTATION_CLASSES.note}`;
-            fragment.querySelectorAll(selector).forEach(unwrapElement);
+            document.querySelectorAll(selector).forEach(span => {
+                if (range.intersectsNode(span)) {
+                    unwrapElement(span);
+                }
+            });
         }
 
-        function wrapFragmentText(fragment, type, noteText = '') {
-            const walker = document.createTreeWalker(fragment, NodeFilter.SHOW_TEXT, {
-                acceptNode: (node) => {
-                    if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
-                    if (type === 'highlight' && node.parentElement?.closest(`.${ANNOTATION_CLASSES.note}`)) {
-                        return NodeFilter.FILTER_REJECT;
-                    }
-                    return NodeFilter.FILTER_ACCEPT;
+        function getTextNodesInRange(range, type) {
+            const nodes = [];
+            const shouldInclude = (node) => {
+                if (!node || !node.nodeValue || !node.nodeValue.trim()) return false;
+                if (!range.intersectsNode(node)) return false;
+                if (type === 'highlight' && node.parentElement?.closest(`.${ANNOTATION_CLASSES.note}`)) {
+                    return false;
                 }
-            });
-            const targets = [];
-            while (walker.nextNode()) {
-                targets.push(walker.currentNode);
+                return true;
+            };
+
+            if (range.commonAncestorContainer.nodeType === Node.TEXT_NODE) {
+                if (shouldInclude(range.commonAncestorContainer)) {
+                    nodes.push(range.commonAncestorContainer);
+                }
+                return nodes;
             }
-            targets.forEach(node => {
-                const span = document.createElement('span');
-                span.classList.add('annotation', type === 'highlight' ? ANNOTATION_CLASSES.highlight : ANNOTATION_CLASSES.note);
-                span.dataset.type = type;
-                if (type === 'note') {
-                    const content = noteText || '';
-                    span.dataset.note = content;
-                    if (content) {
-                        span.setAttribute('data-note', content);
-                        span.title = content;
-                    } else {
-                        span.removeAttribute('data-note');
-                        span.title = 'Note';
-                    }
+
+            const walker = document.createTreeWalker(
+                range.commonAncestorContainer,
+                NodeFilter.SHOW_TEXT,
+                {
+                    acceptNode: (node) => shouldInclude(node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT
                 }
-                node.parentNode.insertBefore(span, node);
-                span.appendChild(node);
-            });
+            );
+
+            while (walker.nextNode()) {
+                nodes.push(walker.currentNode);
+            }
+            return nodes;
+        }
+
+        function wrapTextPortion(node, range, type, noteText = '') {
+            let startOffset = 0;
+            let endOffset = node.nodeValue.length;
+
+            if (node === range.startContainer && range.startOffset > startOffset) {
+                startOffset = range.startOffset;
+            }
+            if (node === range.endContainer && range.endOffset < endOffset) {
+                endOffset = range.endOffset;
+            }
+
+            if (startOffset >= endOffset) return;
+
+            const selectedText = node.splitText(startOffset);
+            selectedText.splitText(endOffset - startOffset);
+
+            const span = document.createElement('span');
+            span.classList.add('annotation', type === 'highlight' ? ANNOTATION_CLASSES.highlight : ANNOTATION_CLASSES.note);
+            span.dataset.type = type;
+            if (type === 'note') {
+                const content = noteText || '';
+                span.dataset.note = content;
+                if (content) {
+                    span.setAttribute('data-note', content);
+                    span.title = content;
+                } else {
+                    span.removeAttribute('data-note');
+                    span.title = 'Note';
+                }
+            }
+            selectedText.parentNode.insertBefore(span, selectedText);
+            span.appendChild(selectedText);
         }
 
         function mergeAdjacentAnnotations() {
@@ -2792,10 +2828,9 @@
                 expandRangeToAnnotations(baseRange, `.${ANNOTATION_CLASSES.note}`);
             }
 
-            const fragment = baseRange.extractContents();
-            cleanupFragment(fragment, type);
-            wrapFragmentText(fragment, type, noteText);
-            baseRange.insertNode(fragment);
+            unwrapAnnotationsInRange(baseRange, type);
+            const targets = getTextNodesInRange(baseRange, type);
+            targets.forEach(node => wrapTextPortion(node, baseRange, type, noteText));
             mergeAdjacentAnnotations();
             closeContextMenu(true);
         }
