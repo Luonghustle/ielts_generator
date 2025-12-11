@@ -650,13 +650,15 @@
         }
 
         .highlight {
-            background-color: #ffff00;
+            background-color: #ffe978;
+            border-radius: 3px;
         }
 
         .comment-highlight {
-            background-color: #90EE90;
+            background-color: #b5f0b5;
             position: relative;
             cursor: help;
+            border-radius: 3px;
         }
 
         .comment-tooltip {
@@ -2587,57 +2589,86 @@
 
             // Track last valid selection within panels
             document.addEventListener('selectionchange', () => {
-                const selection = window.getSelection();
-                if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
-                    const range = selection.getRangeAt(0);
+                const sel = window.getSelection();
+                if (sel && !sel.isCollapsed && sel.toString().trim().length > 0) {
+                    const range = sel.getRangeAt(0).cloneRange();
                     if (panels.some(panel => panel.contains(range.commonAncestorContainer))) {
-                        selectedRange = range.cloneRange();
+                        selectedRange = range;
                         targetElementForClear = null;
                     }
                 }
             });
 
-            const showContextMenu = (e) => {
-                const target = e.target;
-                const isClickOnHighlight = target.closest('.highlight, .comment-highlight');
-                const isSelectionActive = selectedRange && selectedRange.toString().trim().length > 0;
-                
-                let showMenu = false;
-
-                if (isClickOnHighlight) {
-                    document.getElementById('menu-highlight').style.display = 'none';
-                    document.getElementById('menu-note').style.display = 'none';
-                    document.getElementById('menu-clear').style.display = 'block';
-                    document.getElementById('menu-clear-all').style.display = 'block';
-                    contextMenu.targetElementForClear = isClickOnHighlight;
-                    showMenu = true;
-                } else if (isSelectionActive && panels.some(panel => panel.contains(selectedRange.commonAncestorContainer))) {
-                    document.getElementById('menu-highlight').style.display = 'flex';
-                    document.getElementById('menu-note').style.display = 'flex';
-                    document.getElementById('menu-clear').style.display = 'none';
-                    document.getElementById('menu-clear-all').style.display = 'block';
-                    contextMenu.targetElementForClear = null;
-                    showMenu = true;
+            const getActiveRange = () => {
+                const sel = window.getSelection();
+                if (sel && !sel.isCollapsed && sel.toString().trim().length > 0) {
+                    return sel.getRangeAt(0).cloneRange();
                 }
-
-                if (showMenu) {
-                    e.preventDefault();
-                    contextMenu.style.display = 'block';
-                    const menuHeight = contextMenu.offsetHeight;
-                    const menuWidth = contextMenu.offsetWidth;
-                    let left = e.pageX;
-                    let top = e.pageY;
-                    if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth - 5;
-                    if (top + menuHeight > window.innerHeight) top = e.pageY - menuHeight - 5;
-                    else top = e.pageY - menuHeight - 5;
-                    
-                    contextMenu.style.left = `${left}px`;
-                    contextMenu.style.top = `${top}px`;
+                if (selectedRange && !selectedRange.collapsed && selectedRange.toString().trim().length > 0) {
+                    return selectedRange.cloneRange();
                 }
+                return null;
+            };
+
+            const showActionMenu = (range) => {
+                document.getElementById('menu-highlight').style.display = 'flex';
+                document.getElementById('menu-note').style.display = 'flex';
+                document.getElementById('menu-clear').style.display = 'none';
+                document.getElementById('menu-clear-all').style.display = 'block';
+                positionContextMenu(range);
+            };
+
+            const showClearMenu = (targetEl) => {
+                document.getElementById('menu-highlight').style.display = 'none';
+                document.getElementById('menu-note').style.display = 'none';
+                document.getElementById('menu-clear').style.display = 'block';
+                document.getElementById('menu-clear-all').style.display = 'block';
+                contextMenu.targetElementForClear = targetEl;
+                positionContextMenu(targetEl.getBoundingClientRect());
+            };
+
+            const positionContextMenu = (rectLike) => {
+                contextMenu.style.display = 'block';
+                const menuHeight = contextMenu.offsetHeight || 140;
+                const menuWidth = contextMenu.offsetWidth || 140;
+                const rect = rectLike instanceof DOMRect ? rectLike : rectLike.getBoundingClientRect ? rectLike.getBoundingClientRect() : rectLike;
+                let left = rect.left + window.scrollX + (rect.width || 0) / 2;
+                let top = rect.top + window.scrollY;
+                if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth - 5;
+                if (top + menuHeight > window.innerHeight) top = top - menuHeight - 5;
+                contextMenu.style.left = `${left}px`;
+                contextMenu.style.top = `${top}px`;
+            };
+
+            const openMenuForSelection = () => {
+                const range = getActiveRange();
+                if (!range) return;
+                if (!panels.some(panel => panel.contains(range.commonAncestorContainer))) return;
+                selectedRange = range.cloneRange();
+                contextMenu.targetElementForClear = null;
+                showActionMenu(range.getBoundingClientRect());
             };
 
             panels.forEach(panel => {
-                panel.addEventListener('contextmenu', showContextMenu);
+                panel.addEventListener('contextmenu', (e) => {
+                    const mark = e.target.closest('.highlight, .comment-highlight');
+                    if (mark) {
+                        e.preventDefault();
+                        showClearMenu(mark);
+                    }
+                });
+                const maybeOpenSelectionMenu = () => setTimeout(openMenuForSelection, 0);
+                panel.addEventListener('mouseup', (e) => {
+                    if (e.button === 0) maybeOpenSelectionMenu();
+                });
+                panel.addEventListener('keyup', maybeOpenSelectionMenu);
+                panel.addEventListener('click', (e) => {
+                    const mark = e.target.closest('.highlight, .comment-highlight');
+                    if (mark) {
+                        e.preventDefault();
+                        showClearMenu(mark);
+                    }
+                });
             });
 
             document.addEventListener('click', (e) => {
@@ -2645,6 +2676,8 @@
                     closeContextMenu();
                 }
             });
+
+            window.getActiveRange = getActiveRange; // expose for actions
         }
 
         function closeContextMenu() {
@@ -2698,6 +2731,13 @@
                 subRange.setStart(node, start);
                 subRange.setEnd(node, end);
 
+                // If inside an existing mark, move node out to avoid nesting
+                const markAncestor = node.parentElement?.closest('.highlight, .comment-highlight');
+                if (markAncestor) {
+                    markAncestor.parentNode.insertBefore(node, markAncestor);
+                    if (!markAncestor.textContent.trim()) markAncestor.remove();
+                }
+
                 const wrapper = document.createElement('span');
                 wrapper.className = className;
                 if (noteText) {
@@ -2715,8 +2755,10 @@
         }
 
         window.highlightText = () => {
-            if (selectedRange && !selectedRange.collapsed) {
-                applyRangeHighlight(selectedRange, 'highlight');
+            const range = window.getActiveRange ? window.getActiveRange() : null;
+            if (range) {
+                selectedRange = range.cloneRange();
+                applyRangeHighlight(range, 'highlight');
             }
             closeContextMenu();
             window.getSelection().removeAllRanges();
@@ -2724,8 +2766,10 @@
 
         window.addNote = () => {
             const note = prompt('Enter your note:');
-            if (note && selectedRange && !selectedRange.collapsed) {
-                applyRangeHighlight(selectedRange, 'comment-highlight', note);
+            const range = window.getActiveRange ? window.getActiveRange() : null;
+            if (note && range) {
+                selectedRange = range.cloneRange();
+                applyRangeHighlight(range, 'comment-highlight', note);
             }
             closeContextMenu();
             window.getSelection().removeAllRanges();
