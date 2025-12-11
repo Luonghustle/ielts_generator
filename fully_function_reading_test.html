@@ -516,22 +516,6 @@
             border-color: #dc3545;
         }
 
-        function getActiveRange() {
-            const selection = window.getSelection();
-            if (selection && !selection.isCollapsed && selection.toString().trim().length > 0) {
-                return selection.getRangeAt(0).cloneRange();
-            }
-            if (selectedRange && selectedRange.toString().trim().length > 0) {
-                return selectedRange.cloneRange();
-            }
-            return null;
-        }
-
-        .subQuestion.marked {
-            position: relative;
-            color: #333;
-        }
-
         .subQuestion:hover {
             background-color: #f0f0f0;
             border-color: #999;
@@ -547,24 +531,6 @@
             background-color: #28a745;
             color: white;
             border-color: #28a745;
-        }
-
-        .subQuestion.marked.active {
-            box-shadow: 0 0 0 2px #f0c000;
-        }
-
-        .subQuestion.marked::after {
-            content: "";
-            position: absolute;
-            top: -6px;
-            right: -6px;
-            width: 14px;
-            height: 18px;
-            background: #ffd400;
-            border: 1px solid #d49b00;
-            border-radius: 2px 2px 0 0;
-            clip-path: polygon(0 0, 100% 0, 100% 70%, 50% 100%, 0 70%);
-            box-shadow: 0 1px 2px rgba(0,0,0,0.15);
         }
 
         .sr-only {
@@ -649,37 +615,36 @@
             border-bottom: none;
         }
 
-        .highlight {
-            background-color: #ffe978;
-            border-radius: 3px;
-        }
-
-        .comment-highlight {
-            background-color: #b5f0b5;
-            position: relative;
-            cursor: help;
-            border-radius: 3px;
-        }
-
-        .comment-tooltip {
-            position: absolute;
-            bottom: 100%;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #333;
-            color: white;
-            padding: 8px 12px;
+        .annotation-highlight {
+            background-color: #fff3a3;
             border-radius: 4px;
-            font-size: 14px;
-            white-space: nowrap;
-            z-index: 1000;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s;
+            padding: 0 2px;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.05);
+            cursor: pointer;
         }
 
-        .comment-highlight:hover .comment-tooltip {
-            opacity: 1;
+        .annotation-note {
+            background-color: #b4f0c1;
+            border-radius: 4px;
+            padding: 0 2px;
+            box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .annotation-note[data-note]:hover::after {
+            content: attr(data-note);
+            position: absolute;
+            left: 50%;
+            bottom: 100%;
+            transform: translate(-50%, -6px);
+            background: #1f2937;
+            color: #fff;
+            padding: 6px 10px;
+            border-radius: 4px;
+            white-space: nowrap;
+            font-size: 13px;
+            z-index: 2000;
         }
 
         .question {
@@ -1014,94 +979,6 @@
         .tf-options {
             padding-left: 5px;
         }
-
-        .markable-question {
-            position: relative;
-        }
-        .question-number-with-mark {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            margin-right: 10px;
-        }
-        .question-number-with-mark .tf-question-number,
-        .question-number-with-mark .question-number-box {
-            margin-right: 0;
-        }
-        .mark-toggle-btn {
-            width: 26px;
-            height: 26px;
-            border: none;
-            background: transparent;
-            padding: 0;
-            margin-left: 4px;
-            cursor: pointer;
-            opacity: 0;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            transition: opacity 0.2s ease, transform 0.2s ease;
-            color: #777;
-        }
-        .question-number-with-mark:hover .mark-toggle-btn,
-        .markable-blank-wrapper:hover .mark-toggle-btn.inside-blank,
-        .markable-blank-wrapper:focus-within .mark-toggle-btn.inside-blank,
-        .mark-toggle-btn:focus-visible,
-        .mark-toggle-btn.marked {
-            opacity: 1;
-        }
-        .mark-toggle-btn:focus-visible {
-            outline: 2px solid #f0c000;
-            outline-offset: 2px;
-        }
-        .markable-blank-wrapper {
-            position: relative;
-            display: inline-block;
-        }
-        .markable-blank-wrapper input.answer-input,
-        .markable-blank-wrapper .summary-drop-zone,
-        .markable-blank-wrapper .drop-zone {
-            padding-right: 28px !important;
-            position: relative;
-            z-index: 1;
-        }
-        .mark-toggle-btn.inside-blank {
-            position: absolute;
-            right: 6px;
-            top: 50%;
-            transform: translateY(-50%);
-            opacity: 0;
-            width: 18px;
-            height: 18px;
-            color: #777;
-            z-index: 2;
-        }
-        .markable-blank-wrapper:hover .mark-toggle-btn.inside-blank,
-        .markable-blank-wrapper:focus-within .mark-toggle-btn.inside-blank,
-        .mark-toggle-btn.inside-blank.marked {
-            opacity: 1;
-        }
-        .mark-toggle-btn.inside-blank svg {
-            width: 16px;
-            height: 16px;
-        }
-        .mark-toggle-btn svg {
-            width: 22px;
-            height: 22px;
-            stroke: currentColor;
-            fill: none;
-            stroke-width: 2;
-        }
-        .mark-toggle-btn:hover {
-            color: #444;
-        }
-        .mark-toggle-btn.marked {
-            color: #d49b00;
-        }
-        .mark-toggle-btn.marked svg {
-            fill: #ffd400;
-            stroke: #b37b00;
-        }
         .tf-option {
             display: block;
             margin-bottom: 12px;
@@ -1411,7 +1288,7 @@
 <body>
     <div class="header">
         <div class="timer-container">
-            <span class="timer-display">60 minutes remaining</span>
+            <span class="timer-display">60:00</span>
             <div class="timer-controls">
                 <button id="timer-toggle-btn" title="Pause/Resume Timer">
                     <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>
@@ -1426,26 +1303,23 @@
         </a>
     </div>
 
-        <div class="main-container" id="main-container">
-            <div id="passage-header-container">
-                <!-- PART_HEADERS_START -->
-                <div id="part-header-1" class="part-header">
-                    <p><strong>Part 1</strong></p>
-                    <p>Read the text and answer questions 1-13.</p>
-                </div>
-                <div id="part-header-2" class="part-header hidden">
+    <div class="main-container" id="main-container">
+        <div id="passage-header-container">
+            <div id="part-header-1" class="part-header">
+                <p><strong>Part 1</strong></p>
+                <p>Read the text and answer questions 1-13.</p>
+            </div>
+            <div id="part-header-2" class="part-header hidden">
                 <p><strong>Part 2</strong></p>
                 <p>Read the text and answer questions 14-26.</p>
             </div>
-                <div id="part-header-3" class="part-header hidden">
-                    <p><strong>Part 3</strong></p>
-                    <p>Read the text and answer questions 27-40.</p>
-                </div>
-                <!-- PART_HEADERS_END -->
+            <div id="part-header-3" class="part-header hidden">
+                <p><strong>Part 3</strong></p>
+                <p>Read the text and answer questions 27-40.</p>
             </div>
-            <div class="panels-container">
+        </div>
+        <div class="panels-container">
             <div class="passage-panel" id="passage-panel">
-                <!-- PASSAGES_START -->
                 <div id="passage-text-1" class="reading-passage">
                     <h4 class="text-center">The "Extinct" Grass in Britain</h4>
                     <p>Bromus interruptus, commonly known as the interrupted brome, is a plant in the true grass family. Called interrupted brome because of its gappy seed-head, this unprepossessing grass was found nowhere else in the world. Sharp-eyed Victorian botanists were the first to notice it, and by the 1920s the odd-looking grass had been found across much of southern England. Yet its decline was just as dramatic. By 1972 it had vanished from its last toehold—two hay fields at Pampisford, near Cambridge. Even the seeds stored at the Cambridge University Botanic Garden as an insurance policy were dead, having been mistakenly kept at room temperature. Botanists mourned: a unique living entity was gone forever.</p>
@@ -1479,11 +1353,9 @@
                     <p>So if there is a kernel of truth, where does it come from? Perrett has a hunch that the link arises when our prejudices about faces turn into self-fulfilling prophecies—an idea that was investigated by other researchers back in 1977. Our expectations can lead us to influence people to behave in ways that confirm those expectations: consistently treat someone as untrustworthy and they end up behaving that way. This effect sometimes works the other way round, however, especially for those who look cute. The Nobel prize-winning ethologist Konrad Lorenz once suggested that baby-faced features evoke a nurturing response. Support for this has come from work by Zebrowitz, who has found that baby-faced boys and men stimulate an emotional centre of the brain, the amygdala, in a similar way. But there's a twist. Babyfaced men are, on average, better educated, more assertive and apt to win more military medals than their mature-looking counterparts. They are also more likely to be criminals; think Al Capone. Similarly, Zebrowitz found baby-faced boys to be quarrelsome and hostile, and more likely to be academic highfliers. She calls this the "self-defeating prophecy effect": a man with a baby face strives to confound expectations and ends up overcompensating.</p>
                     <p>There is another theory that recalls the old parental warning not to pull faces because they might freeze that way. According to this theory, our personality moulds the way our faces look. It is supported by a study two decades ago which found that angry old people tend to look cross even when asked to strike a neutral expression. A lifetime of scowling, grumpiness and grimaces seemed to have left its mark.</p>
                 </div>
-                <!-- PASSAGES_END -->
             </div>
             <div class="resizer" id="resizer"></div>
             <div class="questions-panel" id="questions-panel">
-                <!-- QUESTIONS_START -->
                 <div id="questions-1" class="question-set">
                     <div class="questions-container">
                         <div class="question" data-q-start="1" data-q-end="8">
@@ -1757,7 +1629,6 @@
                         </div>
                     </div>
                 </div>
-                <!-- QUESTIONS_END -->
             </div>
         </div>
     </div>
@@ -1768,7 +1639,6 @@
         <button class="nav-arrow" onclick="nextQuestion()" id="nextBtn">›</button>
     </div>
 
-    <!-- FOOTER_NAV_START -->
     <!-- Bottom Navigation -->
     <nav class="nav-row perScorableItem" aria-label="Questions">
         <div class="footer__questionWrapper___1tZ46 selected multiple" role="tablist">
@@ -1852,7 +1722,6 @@
             <span>Check Answers</span>
         </button>
     </nav>
-    <!-- FOOTER_NAV_END -->
 
     <!-- Context Menu -->
     <div id="contextMenu" class="context-menu">
@@ -1860,13 +1729,13 @@
             Highlight
         </div>
         <div id="menu-note" class="context-menu-item" onclick="addNote()">
-            Note
+            Take note
         </div>
         <div id="menu-clear" class="context-menu-item" onclick="clearHighlight()">
-            Clear
+            Delete
         </div>
         <div id="menu-clear-all" class="context-menu-item" onclick="clearAllHighlights()">
-            Clear All
+            Delete all
         </div>
     </div>
 
@@ -1884,46 +1753,18 @@
         </div>
     </div>
 
-    <!-- TEST_META_SCRIPT -->
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        // --- TEST META (default fallback; replaced when generator injects window.testMeta) ---
-        const defaultTestMeta = {
-            totalQuestions: 40,
-            parts: [
-                { part: 1, start: 1, end: 13 },
-                { part: 2, start: 14, end: 26 },
-                { part: 3, start: 27, end: 40 }
-            ],
-            correctAnswers: {
-                '1': 'FALSE', '2': 'FALSE', '3': 'NOT GIVEN', '4': 'NOT GIVEN', '5': 'FALSE',
-                '6': 'TRUE', '7': 'TRUE', '8': 'FALSE',
-                '9': 'B', '10': 'C', '11': 'E', '12': 'F', '13': 'A',
-                '14': 'iii', '15': 'i', '16': 'vi', '17': 'ii', '18': 'ix', '19': 'v', '20': 'iv',
-                '21': 'epidemic', '22': 'Finland', '23': 'institutions', '24': 'Eurasia', '25': 'einkorn wheat', '26': 'Singapore',
-                '27': 'NO', '28': 'NOT GIVEN', '29': 'NO', '30': 'YES', '31': 'NOT GIVEN',
-                '32': 'B', '33': 'A', '34': 'B', '35': 'C', '36': 'D',
-                '37': 'B', '38': 'C', '39': 'F', '40': 'E'
-            }
-        };
-        const testMeta = window.testMeta || defaultTestMeta;
-        const partRanges = testMeta.parts || [];
-        const correctAnswers = testMeta.correctAnswers || {};
-        const totalQuestions = testMeta.totalQuestions || Object.keys(correctAnswers).length;
-
         // --- STATE VARIABLES ---
-        let currentPassage = partRanges[0]?.part || 1;
-        let currentQuestion = partRanges[0]?.start || 1;
-        let selectedRange = null;
+        let currentPassage = 1;
+        let currentQuestion = 1;
+        let pendingSelectionRange = null;
+        let activeAnnotationTarget = null;
         let timeInSeconds = 3600;
         let timerInterval;
-        let hasSubmitted = false;
         let draggedItem = null;
         let activeQuestionElement = null;
         let selectedDragItem = null;
-        const markedQuestions = new Set();
-        const markButtons = new Map();
-        const COUNTDOWN_THRESHOLD = 300;
 
         // --- DOM ELEMENTS ---
         const timerDisplay = document.querySelector('.timer-display');
@@ -1934,11 +1775,26 @@
         const passagePanel = document.getElementById('passage-panel');
         const questionsPanel = document.getElementById('questions-panel');
         const contextMenu = document.getElementById('contextMenu');
+        const menuHighlight = document.getElementById('menu-highlight');
+        const menuNote = document.getElementById('menu-note');
+        const menuClear = document.getElementById('menu-clear');
+        const menuClearAll = document.getElementById('menu-clear-all');
 
         // --- ICON SVGs ---
         const playIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M8 5v14l11-7L8 5z"/></svg>';
         const pauseIcon = '<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 0 24 24" width="24px"><path d="M0 0h24v24H0V0z" fill="none"/><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>';
-        const bookmarkIcon = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4h12v16l-6-4-6 4z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round"></path></svg>';
+
+        // --- ANSWERS ---
+        const correctAnswers = {
+            '1': 'FALSE', '2': 'FALSE', '3': 'NOT GIVEN', '4': 'NOT GIVEN', '5': 'FALSE', 
+            '6': 'TRUE', '7': 'TRUE', '8': 'FALSE',
+            '9': 'B', '10': 'C', '11': 'E', '12': 'F', '13': 'A',
+            '14': 'iii', '15': 'i', '16': 'vi', '17': 'ii', '18': 'ix', '19': 'v', '20': 'iv',
+            '21': 'epidemic', '22': 'Finland', '23': 'institutions', '24': 'Eurasia', '25': 'einkorn wheat', '26': 'Singapore',
+            '27': 'NO', '28': 'NOT GIVEN', '29': 'NO', '30': 'YES', '31': 'NOT GIVEN',
+            '32': 'B', '33': 'A', '34': 'B', '35': 'C', '36': 'D',
+            '37': 'B', '38': 'C', '39': 'F', '40': 'E'
+        };
 
         // --- INITIALIZATION ---
         function initialize() {
@@ -1946,8 +1802,7 @@
             initializeDragAndDrop();
             setupCheckboxLimits();
             setupExampleHeading();
-            const firstPart = partRanges[0]?.part || 1;
-            switchToPart(firstPart); // Also calls goToQuestion(first question) and updateNavigation
+            switchToPart(1); // Also calls goToQuestion(1) and updateNavigation
             
             document.body.addEventListener('input', updateAllIndicators);
             document.body.addEventListener('change', updateAllIndicators);
@@ -1957,11 +1812,7 @@
 
             // Add click listeners to question containers for navigation
             document.querySelectorAll('[data-q-start]').forEach(el => {
-                el.addEventListener('click', (ev) => {
-                    // Ignore clicks on form controls to prevent scroll jump
-                    if (ev.target.closest('input, select, label, .tf-options, .multi-choice-option, .matching-form-row, .drop-zone, .summary-drop-zone, .drag-item')) {
-                        return;
-                    }
+                el.addEventListener('click', () => {
                     const qNum = parseInt(el.dataset.qStart, 10);
                     if (currentQuestion !== qNum) {
                         goToQuestion(qNum);
@@ -1971,14 +1822,11 @@
 
             resizer.addEventListener('mousedown', initResize, false);
             initializeContextMenu();
-            initializeQuestionMarkers();
         }
 
         // --- CORE TEST LOGIC ---
 
         function checkAnswers() {
-            if (hasSubmitted) return;
-            hasSubmitted = true;
             // Disable all inputs to prevent changes
             const allInputs = document.querySelectorAll('input, select, textarea');
             allInputs.forEach(input => {
@@ -1990,9 +1838,8 @@
             deliverButton.style.cursor = 'not-allowed';
             
             clearInterval(timerInterval);
-            timerInterval = null;
-            timerToggleButton.innerHTML = playIcon;
             let score = 0;
+            const totalQuestions = 40;
             const resultsDetailsContainer = document.getElementById('results-details');
             resultsDetailsContainer.innerHTML = '';
 
@@ -2259,16 +2106,6 @@
             });
         }
 
-        const getFirstQuestionOfPart = (partNumber) => {
-            const match = partRanges.find(p => p.part === partNumber);
-            return match ? match.start : 1;
-        };
-
-        const getPartForQuestion = (questionNumber) => {
-            const match = partRanges.find(p => questionNumber >= p.start && questionNumber <= p.end);
-            return match ? match.part : partRanges[0]?.part || 1;
-        };
-
         function switchToPart(partNumber) {
             currentPassage = partNumber;
 
@@ -2288,13 +2125,16 @@
             });
 
             // Go to the first question of the part
-            goToQuestion(getFirstQuestionOfPart(partNumber));
+            const firstQuestionOfPart = {1: 1, 2: 14, 3: 27}[partNumber];
+            goToQuestion(firstQuestionOfPart);
         }
         
         function goToQuestion(questionNumber) {
             currentQuestion = questionNumber;
 
-            const passageNumber = getPartForQuestion(questionNumber);
+            let passageNumber = 1;
+            if (questionNumber >= 14 && questionNumber <= 26) passageNumber = 2;
+            else if (questionNumber >= 27) passageNumber = 3;
             
             if (currentPassage !== passageNumber) {
                 switchToPart(passageNumber);
@@ -2370,11 +2210,13 @@
             }
         }
         
-        window.nextQuestion = () => currentQuestion < totalQuestions && goToQuestion(currentQuestion + 1);
+        window.nextQuestion = () => currentQuestion < 40 && goToQuestion(currentQuestion + 1);
         window.previousQuestion = () => currentQuestion > 1 && goToQuestion(currentQuestion - 1);
 
         function updateAllIndicators() {
-            partRanges.forEach(range => updateAttemptedCount(range.part, range.start, range.end));
+            updateAttemptedCount(1, 1, 13);
+            updateAttemptedCount(2, 14, 26);
+            updateAttemptedCount(3, 27, 40);
             updateAnsweredNav();
         }
         
@@ -2498,36 +2340,17 @@
         
         // --- MISC HELPERS ---
         
-        function updateTimerDisplay() {
-            const displaySeconds = Math.max(timeInSeconds, 0);
-            if (displaySeconds > COUNTDOWN_THRESHOLD) {
-                const minutesRemaining = Math.ceil(displaySeconds / 60);
-                timerDisplay.textContent = `${minutesRemaining} minutes remaining`;
-            } else {
-                const minutes = Math.floor(displaySeconds / 60);
-                const seconds = displaySeconds % 60;
-                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-            }
-        }
-
-        function handleTimeExpired() {
-            timeInSeconds = 0;
-            updateTimerDisplay();
-            clearInterval(timerInterval);
-            timerInterval = null;
-            timerToggleButton.innerHTML = playIcon;
-            checkAnswers();
-        }
-
         function startTimer() {
-            if (hasSubmitted) return;
             if (timerInterval) clearInterval(timerInterval); // Ensure no multiple intervals
-            updateTimerDisplay();
             timerInterval = setInterval(() => {
-                timeInSeconds = Math.max(timeInSeconds - 1, 0);
-                updateTimerDisplay();
+                timeInSeconds--;
+                const minutes = Math.floor(timeInSeconds / 60);
+                const seconds = timeInSeconds % 60;
+                timerDisplay.textContent = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
                 if (timeInSeconds <= 0) {
-                    handleTimeExpired();
+                    clearInterval(timerInterval);
+                    timerDisplay.textContent = "Time's up!";
+                    // checkAnswers(); // Disabled to prevent modal from opening automatically.
                 }
             }, 1000);
             timerToggleButton.innerHTML = pauseIcon;
@@ -2535,12 +2358,12 @@
 
         function pauseTimer() {
             clearInterval(timerInterval);
-            timerInterval = null;
             timerToggleButton.innerHTML = playIcon;
         }
 
         function toggleTimer() {
-            if (timerInterval) {
+            // Check based on the icon currently displayed
+            if (timerToggleButton.innerHTML.includes('M6 19h4V5H6v14z')) { // Check for pause icon shape
                 pauseTimer();
             } else {
                 startTimer();
@@ -2551,6 +2374,7 @@
             timeInSeconds = 3600;
             updateTimerDisplay();
             startTimer();
+            timerToggleButton.innerHTML = pauseIcon;
         }
         
         function setupCheckboxLimits() {
@@ -2582,307 +2406,258 @@
         }
         
         // --- CONTEXT MENU (Highlighting) ---
-        
-        function initializeContextMenu() {
-            const panels = [passagePanel, questionsPanel];
-            let targetElementForClear = null;
-
-            // Track last valid selection within panels
-            document.addEventListener('selectionchange', () => {
-                const sel = window.getSelection();
-                if (sel && !sel.isCollapsed && sel.toString().trim().length > 0) {
-                    const range = sel.getRangeAt(0).cloneRange();
-                    if (panels.some(panel => panel.contains(range.commonAncestorContainer))) {
-                        selectedRange = range;
-                        targetElementForClear = null;
-                    }
-                }
-            });
-
-            const getActiveRange = () => {
-                const sel = window.getSelection();
-                if (sel && !sel.isCollapsed && sel.toString().trim().length > 0) {
-                    return sel.getRangeAt(0).cloneRange();
-                }
-                if (selectedRange && !selectedRange.collapsed && selectedRange.toString().trim().length > 0) {
-                    return selectedRange.cloneRange();
-                }
-                return null;
-            };
-
-            const showActionMenu = (range) => {
-                document.getElementById('menu-highlight').style.display = 'flex';
-                document.getElementById('menu-note').style.display = 'flex';
-                document.getElementById('menu-clear').style.display = 'none';
-                document.getElementById('menu-clear-all').style.display = 'block';
-                positionContextMenu(range);
-            };
-
-            const showClearMenu = (targetEl) => {
-                document.getElementById('menu-highlight').style.display = 'none';
-                document.getElementById('menu-note').style.display = 'none';
-                document.getElementById('menu-clear').style.display = 'block';
-                document.getElementById('menu-clear-all').style.display = 'block';
-                contextMenu.targetElementForClear = targetEl;
-                positionContextMenu(targetEl.getBoundingClientRect());
-            };
-
-            const positionContextMenu = (rectLike) => {
-                contextMenu.style.display = 'block';
-                const menuHeight = contextMenu.offsetHeight || 140;
-                const menuWidth = contextMenu.offsetWidth || 140;
-                const rect = rectLike instanceof DOMRect ? rectLike : rectLike.getBoundingClientRect ? rectLike.getBoundingClientRect() : rectLike;
-                let left = rect.left + window.scrollX + (rect.width || 0) / 2;
-                let top = rect.top + window.scrollY;
-                if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth - 5;
-                if (top + menuHeight > window.innerHeight) top = top - menuHeight - 5;
-                contextMenu.style.left = `${left}px`;
-                contextMenu.style.top = `${top}px`;
-            };
-
-            const openMenuForSelection = () => {
-                const range = getActiveRange();
-                if (!range) return;
-                if (!panels.some(panel => panel.contains(range.commonAncestorContainer))) return;
-                selectedRange = range.cloneRange();
-                contextMenu.targetElementForClear = null;
-                showActionMenu(range.getBoundingClientRect());
-            };
-
-            panels.forEach(panel => {
-                panel.addEventListener('contextmenu', (e) => {
-                    const mark = e.target.closest('.highlight, .comment-highlight');
-                    if (mark) {
-                        e.preventDefault();
-                        showClearMenu(mark);
-                    }
-                });
-                const maybeOpenSelectionMenu = () => setTimeout(openMenuForSelection, 0);
-                panel.addEventListener('mouseup', (e) => {
-                    if (e.button === 0) maybeOpenSelectionMenu();
-                });
-                panel.addEventListener('keyup', maybeOpenSelectionMenu);
-                panel.addEventListener('click', (e) => {
-                    const mark = e.target.closest('.highlight, .comment-highlight');
-                    if (mark) {
-                        e.preventDefault();
-                        showClearMenu(mark);
-                    }
-                });
-            });
-
-            document.addEventListener('click', (e) => {
-                if (contextMenu.style.display === 'block' && !contextMenu.contains(e.target)) {
-                    closeContextMenu();
-                }
-            });
-
-            window.getActiveRange = getActiveRange; // expose for actions
-        }
-
-        function closeContextMenu() {
-            contextMenu.style.display = 'none';
-            contextMenu.targetElementForClear = null;
-        }
+        const ANNOTATION_CLASSES = {
+            highlight: 'annotation-highlight',
+            note: 'annotation-note'
+        };
 
         function unwrapElement(element) {
-            const parent = element.parentNode;
+            const parent = element?.parentNode;
             if (!parent) return;
             while (element.firstChild) {
                 parent.insertBefore(element.firstChild, element);
             }
             parent.removeChild(element);
-            parent.normalize();
         }
 
-        function applyRangeHighlight(range, className, noteText) {
-            if (!range || range.collapsed) return;
+        function selectionWithinPanels(selection) {
+            const anchor = selection.anchorNode;
+            const focus = selection.focusNode;
+            const inPassage = node => node && (passagePanel.contains(node) || questionsPanel.contains(node));
+            return inPassage(anchor) && inPassage(focus);
+        }
 
-            const intersectsNode = (r, node) => {
-                if (typeof r.intersectsNode === 'function') {
-                    try { return r.intersectsNode(node); } catch (e) { /* fall through */ }
+        function isRangeInsidePanels(range) {
+            const root = range.commonAncestorContainer;
+            return passagePanel.contains(root) || questionsPanel.contains(root);
+        }
+
+        function getCurrentSelectionRange() {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return null;
+            return selection.getRangeAt(0).cloneRange();
+        }
+
+        function positionContextMenu(x, y) {
+            contextMenu.style.display = 'block';
+            const menuHeight = contextMenu.offsetHeight;
+            const menuWidth = contextMenu.offsetWidth;
+            let left = x;
+            let top = y - menuHeight - 8;
+            if (left + menuWidth > window.innerWidth) left = window.innerWidth - menuWidth - 8;
+            if (left < 8) left = 8;
+            if (top < 8) top = y + 8;
+            contextMenu.style.left = `${left}px`;
+            contextMenu.style.top = `${top}px`;
+        }
+
+        function resetSelectionState() {
+            pendingSelectionRange = null;
+            activeAnnotationTarget = null;
+        }
+
+        function showMenuForSelection(event) {
+            menuHighlight.style.display = 'flex';
+            menuNote.style.display = 'flex';
+            menuClear.style.display = 'none';
+            menuClearAll.style.display = 'none';
+            contextMenu.dataset.mode = 'create';
+            positionContextMenu(event.pageX, event.pageY);
+        }
+
+        function showMenuForAnnotation(event, target) {
+            activeAnnotationTarget = target;
+            pendingSelectionRange = null;
+            window.getSelection().removeAllRanges();
+            menuHighlight.style.display = 'none';
+            menuNote.style.display = 'none';
+            menuClear.style.display = 'flex';
+            menuClearAll.style.display = 'flex';
+            contextMenu.dataset.mode = 'manage';
+            positionContextMenu(event.pageX, event.pageY);
+        }
+
+        function closeContextMenu(resetSelection = false) {
+            contextMenu.style.display = 'none';
+            contextMenu.dataset.mode = '';
+            if (resetSelection) {
+                window.getSelection().removeAllRanges();
+            }
+            resetSelectionState();
+        }
+
+        function expandRangeToAnnotations(range, selector) {
+            const spans = Array.from(document.querySelectorAll(selector));
+            spans.forEach(span => {
+                if (!range.intersectsNode(span)) return;
+                const spanRange = document.createRange();
+                spanRange.selectNode(span);
+                if (range.compareBoundaryPoints(Range.START_TO_START, spanRange) > 0) {
+                    range.setStartBefore(span);
                 }
-                const nodeRange = document.createRange();
-                nodeRange.selectNodeContents(node);
-                return !(r.compareBoundaryPoints(Range.END_TO_START, nodeRange) <= 0 ||
-                         r.compareBoundaryPoints(Range.START_TO_END, nodeRange) >= 0);
-            };
+                if (range.compareBoundaryPoints(Range.END_TO_END, spanRange) < 0) {
+                    range.setEndAfter(span);
+                }
+            });
+        }
 
-            const walker = document.createTreeWalker(
-                range.commonAncestorContainer,
-                NodeFilter.SHOW_TEXT,
-                {
-                    acceptNode: (node) => {
-                        if (!node.textContent || !node.textContent.trim()) return NodeFilter.FILTER_REJECT;
-                        return intersectsNode(range, node) ? NodeFilter.FILTER_ACCEPT : NodeFilter.FILTER_REJECT;
+        function cleanupFragment(fragment, type) {
+            const selector = type === 'highlight'
+                ? `.${ANNOTATION_CLASSES.highlight}`
+                : `.${ANNOTATION_CLASSES.highlight}, .${ANNOTATION_CLASSES.note}`;
+            fragment.querySelectorAll(selector).forEach(unwrapElement);
+        }
+
+        function wrapFragmentText(fragment, type, noteText = '') {
+            const walker = document.createTreeWalker(fragment, NodeFilter.SHOW_TEXT, {
+                acceptNode: (node) => {
+                    if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+                    if (type === 'highlight' && node.parentElement?.closest(`.${ANNOTATION_CLASSES.note}`)) {
+                        return NodeFilter.FILTER_REJECT;
+                    }
+                    return NodeFilter.FILTER_ACCEPT;
+                }
+            });
+            const targets = [];
+            while (walker.nextNode()) {
+                targets.push(walker.currentNode);
+            }
+            targets.forEach(node => {
+                const span = document.createElement('span');
+                span.classList.add('annotation', type === 'highlight' ? ANNOTATION_CLASSES.highlight : ANNOTATION_CLASSES.note);
+                span.dataset.type = type;
+                if (type === 'note') {
+                    const content = noteText || '';
+                    span.dataset.note = content;
+                    if (content) {
+                        span.setAttribute('data-note', content);
+                        span.title = content;
+                    } else {
+                        span.removeAttribute('data-note');
+                        span.title = 'Note';
                     }
                 }
-            );
-
-            const nodes = [];
-            while (walker.nextNode()) nodes.push(walker.currentNode);
-
-            nodes.forEach(node => {
-                const start = (node === range.startContainer) ? range.startOffset : 0;
-                const end = (node === range.endContainer) ? range.endOffset : node.length;
-                if (start >= end) return;
-
-                const subRange = document.createRange();
-                subRange.setStart(node, start);
-                subRange.setEnd(node, end);
-
-                // If inside an existing mark, move node out to avoid nesting
-                const markAncestor = node.parentElement?.closest('.highlight, .comment-highlight');
-                if (markAncestor) {
-                    markAncestor.parentNode.insertBefore(node, markAncestor);
-                    if (!markAncestor.textContent.trim()) markAncestor.remove();
-                }
-
-                const wrapper = document.createElement('span');
-                wrapper.className = className;
-                if (noteText) {
-                    const tooltip = document.createElement('span');
-                    tooltip.className = 'comment-tooltip';
-                    tooltip.textContent = noteText;
-                    wrapper.appendChild(tooltip);
-                }
-
-                const frag = subRange.extractContents();
-                wrapper.insertBefore(frag, wrapper.firstChild);
-                subRange.insertNode(wrapper);
-                subRange.detach();
+                node.parentNode.insertBefore(span, node);
+                span.appendChild(node);
             });
         }
 
-        window.highlightText = () => {
-            const range = window.getActiveRange ? window.getActiveRange() : null;
-            if (range) {
-                selectedRange = range.cloneRange();
-                applyRangeHighlight(range, 'highlight');
-            }
-            closeContextMenu();
-            window.getSelection().removeAllRanges();
-        };
+        function mergeAdjacentAnnotations() {
+            const annotations = document.querySelectorAll(`.${ANNOTATION_CLASSES.highlight}, .${ANNOTATION_CLASSES.note}`);
+            annotations.forEach(span => {
+                if (!span.parentNode) return;
+                let cursor = span.nextSibling;
+                while (true) {
+                    const whitespaceBetween = [];
+                    while (cursor && cursor.nodeType === Node.TEXT_NODE && !cursor.textContent.trim()) {
+                        whitespaceBetween.push(cursor);
+                        cursor = cursor.nextSibling;
+                    }
+                    if (
+                        cursor &&
+                        cursor.nodeType === Node.ELEMENT_NODE &&
+                        cursor.classList.contains('annotation') &&
+                        cursor.dataset.type === span.dataset.type &&
+                        (span.dataset.type !== 'note' || (span.dataset.note || '') === (cursor.dataset.note || ''))
+                    ) {
+                        whitespaceBetween.forEach(node => span.appendChild(node));
+                        while (cursor.firstChild) {
+                            span.appendChild(cursor.firstChild);
+                        }
+                        const after = cursor.nextSibling;
+                        cursor.remove();
+                        cursor = after;
+                    } else {
+                        break;
+                    }
+                }
+                if (!span.textContent.trim()) {
+                    unwrapElement(span);
+                }
+            });
+        }
 
-        window.addNote = () => {
-            const note = prompt('Enter your note:');
-            const range = window.getActiveRange ? window.getActiveRange() : null;
-            if (note && range) {
-                selectedRange = range.cloneRange();
-                applyRangeHighlight(range, 'comment-highlight', note);
+        function handleTextSelection(event) {
+            const selection = window.getSelection();
+            if (!selection || selection.rangeCount === 0 || selection.isCollapsed || !selection.toString().trim()) {
+                return;
             }
-            closeContextMenu();
-            window.getSelection().removeAllRanges();
-        };
+            if (!selectionWithinPanels(selection)) {
+                return;
+            }
+            const range = selection.getRangeAt(0).cloneRange();
+            pendingSelectionRange = range;
+            activeAnnotationTarget = null;
+            showMenuForSelection(event);
+        }
 
-        window.clearHighlight = () => {
-             const elementToClear = contextMenu.targetElementForClear;
-             if (elementToClear) {
-                 unwrapElement(elementToClear);
-             }
-             closeContextMenu();
-             window.getSelection().removeAllRanges();
-        };
+        function initializeContextMenu() {
+            const panels = [passagePanel, questionsPanel];
+            panels.forEach(panel => {
+                panel.addEventListener('mouseup', (e) => {
+                    // Allow native selection to settle before reading it
+                    setTimeout(() => handleTextSelection(e), 0);
+                });
+            });
+
+            document.addEventListener('click', (e) => {
+                if (contextMenu.contains(e.target)) return;
+                const annotation = e.target.closest(`.${ANNOTATION_CLASSES.highlight}, .${ANNOTATION_CLASSES.note}`);
+                if (annotation) {
+                    showMenuForAnnotation(e, annotation);
+                    return;
+                }
+                closeContextMenu();
+            });
+        }
+
+        function applyAnnotation(type, noteText = '') {
+            const baseRange = pendingSelectionRange ? pendingSelectionRange.cloneRange() : getCurrentSelectionRange();
+            if (!baseRange || baseRange.collapsed || !isRangeInsidePanels(baseRange)) {
+                closeContextMenu(true);
+                return;
+            }
+
+            if (type === 'highlight') {
+                expandRangeToAnnotations(baseRange, `.${ANNOTATION_CLASSES.highlight}`);
+            } else {
+                expandRangeToAnnotations(baseRange, `.${ANNOTATION_CLASSES.note}`);
+            }
+
+            const fragment = baseRange.extractContents();
+            cleanupFragment(fragment, type);
+            wrapFragmentText(fragment, type, noteText);
+            baseRange.insertNode(fragment);
+            mergeAdjacentAnnotations();
+            closeContextMenu(true);
+        }
+
+        function highlightText() {
+            applyAnnotation('highlight');
+        }
+
+        function addNote() {
+            const note = prompt('Nhập nội dung ghi chú (Take note):');
+            if (note === null) {
+                closeContextMenu();
+                return;
+            }
+            applyAnnotation('note', note.trim());
+        }
+
+        function clearHighlight() {
+            if (activeAnnotationTarget) {
+                unwrapElement(activeAnnotationTarget);
+                mergeAdjacentAnnotations();
+            }
+            closeContextMenu(true);
+        }
         
-        window.clearAllHighlights = () => {
-            document.querySelectorAll('.highlight, .comment-highlight').forEach(unwrapElement);
-            closeContextMenu();
-            window.getSelection().removeAllRanges();
-        };
-
-        // --- QUESTION MARKING ---
-
-        function findQuestionAnchor(qNum) {
-            const tfNumber = Array.from(document.querySelectorAll('.tf-question-number')).find(el => parseInt(el.textContent, 10) === qNum);
-            if (tfNumber) return tfNumber;
-
-            const strongLabel = Array.from(document.querySelectorAll(`label[for="q${qNum}"] strong`)).find(el => /^\d+$/.test(el.textContent.trim()));
-            if (strongLabel) return strongLabel;
-
-            const genericLabel = document.querySelector(`label[for="q${qNum}"]`);
-            if (genericLabel) return genericLabel;
-
-            const textInput = document.getElementById(`q${qNum}`);
-            if (textInput) return textInput;
-
-            const summaryBlank = document.querySelector(`.summary-drop-zone[data-q-start="${qNum}"]`);
-            if (summaryBlank) return summaryBlank;
-
-            return null;
-        }
-
-        function createMarkerButton(anchor, qNum) {
-            if (!anchor || anchor.closest('.question-number-with-mark') || anchor.closest('.markable-blank-wrapper')) return null;
-            const isInput = anchor.tagName === 'INPUT';
-            const isSummaryBlank = anchor.classList?.contains('summary-drop-zone') || anchor.classList?.contains('drop-zone');
-            const isInlineBlank = isInput || isSummaryBlank;
-
-            const wrapper = document.createElement('span');
-            wrapper.dataset.questionNumber = qNum;
-            const parent = anchor.parentNode;
-            if (!parent) return null;
-
-            if (isInlineBlank) {
-                wrapper.className = 'markable-blank-wrapper';
-                parent.insertBefore(wrapper, anchor);
-                wrapper.appendChild(anchor);
-            } else {
-                wrapper.className = 'question-number-with-mark';
-                const displayMode = window.getComputedStyle(anchor).display;
-                if (displayMode === 'block' || displayMode === 'flex') {
-                    wrapper.style.display = 'flex';
-                    wrapper.style.alignItems = 'center';
-                }
-                parent.insertBefore(wrapper, anchor);
-                wrapper.appendChild(anchor);
-            }
-
-            const button = document.createElement('button');
-            button.type = 'button';
-            button.className = isInlineBlank ? 'mark-toggle-btn inside-blank' : 'mark-toggle-btn';
-            button.dataset.questionNumber = qNum;
-            button.setAttribute('aria-label', `Đánh dấu câu ${qNum}`);
-            button.innerHTML = bookmarkIcon;
-            button.addEventListener('click', (e) => {
-                e.stopPropagation();
-                toggleMark(qNum);
-            });
-            wrapper.appendChild(button);
-
-            const markHost = wrapper.closest('.tf-question, .matching-form-row, .matching-question-item, .question, .drag-drop-question, .summary-question, .paragraph-matching-question') || wrapper;
-            markHost.classList.add('markable-question');
-
-            markButtons.set(qNum, button);
-            return button;
-        }
-
-        function initializeQuestionMarkers() {
-            for (let i = 1; i <= totalQuestions; i++) {
-                const anchor = findQuestionAnchor(i);
-                createMarkerButton(anchor, i);
-            }
-        }
-
-        function toggleMark(qNum) {
-            const isMarked = markedQuestions.has(qNum);
-            if (isMarked) {
-                markedQuestions.delete(qNum);
-            } else {
-                markedQuestions.add(qNum);
-            }
-            updateMarkState(qNum, !isMarked);
-        }
-
-        function updateMarkState(qNum, marked) {
-            const btn = markButtons.get(qNum);
-            if (btn) {
-                btn.classList.toggle('marked', marked);
-                btn.setAttribute('aria-pressed', marked ? 'true' : 'false');
-            }
-            const navButton = document.querySelector(`.subQuestion[onclick="goToQuestion(${qNum})"]`);
-            if (navButton) {
-                navButton.classList.toggle('marked', marked);
-            }
+        function clearAllHighlights() {
+            document.querySelectorAll(`.${ANNOTATION_CLASSES.highlight}, .${ANNOTATION_CLASSES.note}`)
+                .forEach(unwrapElement);
+            mergeAdjacentAnnotations();
+            closeContextMenu(true);
         }
 
         function updateAttemptedCount(part, startQ, endQ) {
