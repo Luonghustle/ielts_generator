@@ -1,160 +1,502 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>IELTS Reading HTML Generator</title>
+    <title>IELTS Reading Generator</title>
     <style>
         :root {
-            --bg: #0f172a;
-            --panel: #111827;
-            --accent: #38bdf8;
-            --muted: #cbd5e1;
-            --border: #1f2937;
-            --success: #22c55e;
+            --bg: #040814;
+            --panel: #0b1222;
+            --panel-2: #0f1a30;
+            --edge: #102341;
+            --ink: #e7ecf7;
+            --muted: #94a2c2;
+            --border: #1b2a46;
+            --accent: #6fffe9;
+            --accent-2: #60a5fa;
+            --accent-3: #8b5cf6;
             --error: #f87171;
+            --success: #34d399;
+            --shadow: 0 24px 60px rgba(0, 0, 0, 0.45);
+            --radius: 16px;
         }
         * { box-sizing: border-box; }
         body {
             margin: 0;
-            font-family: "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
-            background: radial-gradient(circle at 20% 20%, rgba(56, 189, 248, 0.08), transparent 25%), var(--bg);
-            color: #e2e8f0;
+            font-family: "Space Grotesk", "Inter", "Segoe UI", system-ui, -apple-system, sans-serif;
+            background: radial-gradient(circle at 10% 20%, rgba(96, 165, 250, 0.10), transparent 32%),
+                        radial-gradient(circle at 80% 0%, rgba(111, 255, 233, 0.10), transparent 30%),
+                        var(--bg);
+            color: var(--ink);
+            min-height: 100vh;
         }
-        header {
-            padding: 20px 24px;
-            border-bottom: 1px solid var(--border);
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            background: rgba(15, 23, 42, 0.9);
-            backdrop-filter: blur(6px);
+        body::before {
+            content: "";
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            background: linear-gradient(90deg, rgba(255,255,255,0.04) 1px, transparent 1px),
+                        linear-gradient(0deg, rgba(255,255,255,0.04) 1px, transparent 1px);
+            background-size: 120px 120px;
+            opacity: 0.35;
+        }
+        .container {
+            width: min(1600px, 100% - 36px);
+            margin: 0 auto;
+        }
+        .app-header {
             position: sticky;
             top: 0;
             z-index: 10;
+            backdrop-filter: blur(10px);
+            background: rgba(6, 10, 20, 0.88);
+            border-bottom: 1px solid var(--border);
         }
-        header h1 {
-            margin: 0;
-            font-size: 20px;
-            letter-spacing: 0.3px;
+        .header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            padding: 16px 0;
         }
-        main {
-            padding: 24px;
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 16px;
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-weight: 800;
+            letter-spacing: 0.4px;
         }
-        .card {
-            background: var(--panel);
-            border: 1px solid var(--border);
+        .brand-mark {
+            width: 44px;
+            height: 44px;
             border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            display: grid;
+            place-items: center;
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #031020;
+            box-shadow: 0 10px 30px rgba(96, 165, 250, 0.35);
+            font-weight: 800;
         }
-        .card h2 {
-            margin-top: 0;
-            font-size: 16px;
+        .brand-sub {
+            color: var(--muted);
+            font-size: 13px;
+            font-weight: 500;
+        }
+        .chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 7px 12px;
+            border-radius: 999px;
+            background: rgba(96, 165, 250, 0.14);
+            color: var(--ink);
+            border: 1px solid rgba(96, 165, 250, 0.25);
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .chip.success {
+            background: rgba(94, 234, 212, 0.14);
+            border-color: rgba(94, 234, 212, 0.35);
+            color: #c9fff2;
+        }
+        .chip.soft {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: rgba(255, 255, 255, 0.08);
+            color: var(--muted);
+        }
+        main.page {
+            padding: 28px 0 46px;
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+        }
+        .panel {
+            background: linear-gradient(150deg, rgba(14, 20, 40, 0.92), rgba(10, 14, 26, 0.98));
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            padding: 16px 18px;
+            box-shadow: var(--shadow);
+        }
+        .panel-title {
+            margin: 0;
+            font-size: 18px;
             letter-spacing: 0.2px;
         }
+        .panel-title.xl {
+            font-size: 26px;
+            margin-bottom: 6px;
+        }
+        .panel-desc {
+            margin: 6px 0 12px;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+        .eyebrow {
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            font-size: 11px;
+            color: var(--accent-3);
+            margin: 0 0 6px;
+            font-weight: 700;
+        }
+        .panel-head {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 12px;
+        }
+        .panel-head h2 { margin: 0; }
+        .hero-panel {
+            background: radial-gradient(circle at 20% 20%, rgba(94, 234, 212, 0.10), transparent 45%), var(--panel);
+            border: 1px solid rgba(94, 234, 212, 0.22);
+        }
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+        }
+        .hero-tile {
+            padding: 12px 14px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .grid-shell {
+            display: grid;
+            grid-template-columns: 1.15fr 0.85fr;
+            gap: 18px;
+        }
+        .stack { display: flex; flex-direction: column; gap: 12px; }
+        .field-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 700;
+            margin-bottom: 6px;
+            color: #dbeafe;
+            letter-spacing: 0.1px;
+        }
+        .input-shell { display: flex; flex-direction: column; gap: 6px; }
         textarea {
             width: 100%;
-            min-height: 260px;
-            background: #0b1220;
+            min-height: 320px;
+            background: #050c1a;
             color: #e2e8f0;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            padding: 12px;
-            font-family: "Fira Code", "Consolas", monospace;
+            border: 1px solid #1f2c45;
+            border-radius: 12px;
+            padding: 14px;
+            font-family: "Fira Code", "JetBrains Mono", "Consolas", monospace;
             font-size: 14px;
             line-height: 1.5;
             resize: vertical;
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.02);
         }
-        button {
-            background: linear-gradient(135deg, #38bdf8, #60a5fa);
-            color: #0b1220;
-            border: none;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-weight: 700;
+        textarea::placeholder { color: #556285; }
+        .control-row {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        .btn {
+            border: 1px solid transparent;
+            border-radius: 12px;
+            padding: 12px 15px;
+            font-weight: 800;
             cursor: pointer;
-            transition: transform 0.08s ease, box-shadow 0.2s ease;
+            letter-spacing: 0.2px;
+            transition: transform 0.08s ease, box-shadow 0.16s ease, border-color 0.16s ease, background 0.16s ease;
+            background: rgba(96, 165, 250, 0.14);
+            color: #e5e7eb;
         }
-        button:hover { transform: translateY(-1px); box-shadow: 0 10px 30px rgba(56, 189, 248, 0.3); }
-        button:disabled { opacity: 0.5; cursor: not-allowed; }
-        .stack { display: flex; flex-direction: column; gap: 10px; }
-        .row { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-        .pill {
+        .btn:hover { transform: translateY(-1px); box-shadow: 0 14px 32px rgba(96, 165, 250, 0.35); }
+        .btn:active { transform: translateY(0); }
+        .btn:disabled { opacity: 0.55; cursor: not-allowed; transform: none; box-shadow: none; }
+        .btn.primary {
+            background: linear-gradient(135deg, var(--accent), var(--accent-2));
+            color: #041023;
+            border-color: transparent;
+            box-shadow: 0 20px 44px rgba(111, 255, 233, 0.25);
+        }
+        .btn.strong {
+            background: linear-gradient(135deg, #7c3aed, #0ea5e9);
+            border-color: rgba(124, 58, 237, 0.5);
+            color: #f8fafc;
+            box-shadow: 0 16px 36px rgba(14, 165, 233, 0.35);
+        }
+        .btn.secondary {
+            background: rgba(94, 234, 212, 0.12);
+            border-color: rgba(94, 234, 212, 0.35);
+        }
+        .btn.ghost {
+            background: rgba(255, 255, 255, 0.04);
+            border-color: var(--border);
+            color: var(--muted);
+        }
+        .file-label {
+            position: relative;
+            overflow: hidden;
             display: inline-flex;
             align-items: center;
-            gap: 6px;
-            padding: 6px 10px;
-            border-radius: 999px;
-            background: #0b1220;
-            border: 1px solid var(--border);
-            color: var(--muted);
-            font-size: 13px;
+            gap: 8px;
         }
+        .file-label input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
         .status {
-            margin: 0;
             font-size: 13px;
             color: var(--muted);
         }
         .status.success { color: var(--success); }
         .status.error { color: var(--error); }
-        .link {
-            color: var(--accent);
-            text-decoration: none;
-            font-weight: 600;
-        }
-        iframe {
-            width: 100%;
+        .helper {
+            padding: 12px 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
             border: 1px solid var(--border);
+            color: var(--muted);
+            font-size: 14px;
+            line-height: 1.55;
+        }
+        .helper-title { margin: 0 0 6px; font-weight: 700; color: var(--ink); }
+        .helper-list {
+            margin: 0;
+            padding-left: 16px;
+            display: grid;
+            gap: 6px;
+            color: var(--muted);
+        }
+        .template-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 12px;
+            margin: 10px 0;
+        }
+        .template-card {
+            padding: 12px;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .option-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .option-card {
+            position: relative;
+            padding: 12px;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            background: linear-gradient(135deg, rgba(96, 165, 250, 0.08), rgba(111, 255, 233, 0.04));
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+        .option-card input { position: absolute; inset: 0; opacity: 0; cursor: pointer; }
+        .option-card .option-title { font-weight: 800; color: #dbeafe; }
+        .option-card .option-note { color: var(--muted); font-size: 13px; }
+        .option-card.active {
+            border-color: rgba(111, 255, 233, 0.55);
+            box-shadow: 0 12px 28px rgba(111, 255, 233, 0.18);
+        }
+        .inline-status {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 10px;
             border-radius: 10px;
-            min-height: 220px;
-            background: #ffffff;
+            background: rgba(96, 165, 250, 0.10);
+            border: 1px solid rgba(96, 165, 250, 0.18);
+        }
+        .tip-list {
+            margin: 8px 0 0;
+            padding-left: 16px;
+            color: var(--muted);
+            line-height: 1.55;
+        }
+        .json-field { margin-top: 10px; }
+        .hidden { display: none !important; }
+        @media (max-width: 1200px) {
+            .grid-shell { grid-template-columns: 1fr; }
+            .container { width: min(100%, 100% - 24px); }
         }
     </style>
 </head>
 <body>
-    <header>
-        <h1>IELTS Reading HTML Generator</h1>
-        <div class="pill">Local/offline - uses template/base-reading.html</div>
+    <header class="app-header">
+        <div class="container header-row">
+            <div class="brand">
+                <span class="brand-mark">IG</span>
+                <div>
+                    <div>IELTS Reading Generator</div>
+                    <div class="brand-sub">Local-first UI/UX refresh</div>
+                </div>
+            </div>
+            <div class="control-row" style="justify-content: flex-end;">
+                <span class="chip success">Offline, no uploads</span>
+                <span class="chip">Dark tech theme</span>
+                <span class="chip ghost">Template: template/base-reading.html</span>
+            </div>
+        </div>
     </header>
-    <main>
-        <section class="card stack">
-            <h2>1) Paste or load JSON</h2>
-            <textarea id="json-input" spellcheck="false" placeholder="Paste your JSON here..."></textarea>
-            <div class="row">
-                <input type="file" id="file-input" accept=".json">
-                <button id="load-sample">Load sample</button>
-                <span class="status" id="json-status"></span>
+
+    <main class="container page">
+        <section class="panel">
+            <div class="panel-head">
+                <div>
+                    <p class="eyebrow">Output</p>
+                    <h2 class="panel-title">Generate & download</h2>
+                </div>
+                <span class="chip soft">Preview opens in a new tab</span>
+            </div>
+            <p class="panel-desc">Generate the HTML file with the chosen template and your JSON. Use Preview to open it in another browser tab, then download the same file.</p>
+            <div class="control-row">
+                <button class="btn primary" id="generate-btn">Generate</button>
+                <button class="btn strong" id="open-preview-btn" disabled>Preview in new tab</button>
+                <button class="btn secondary" id="download-btn" disabled>Download HTML</button>
+                <span class="status" id="result-status"></span>
+            </div>
+            <p class="status" id="preview-note">Tip: Generate first. Preview will open the output file in a new tab.</p>
+        </section>
+
+        <div class="grid-shell">
+            <section class="panel" id="data-panel">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Data</p>
+                        <h2 class="panel-title">Test JSON</h2>
+                    </div>
+                    <span class="chip soft">No coding needed</span>
+                </div>
+                <p class="panel-desc">Upload or paste your test JSON. We validate the input and keep your formatting intact.</p>
+                <div class="control-row">
+                    <label class="file-label btn secondary">
+                        <input type="file" id="file-input" accept=".json">
+                        <span>Upload JSON</span>
+                    </label>
+                    <button class="btn ghost" id="load-sample">Load sample</button>
+                    <span class="status" id="json-status"></span>
+                </div>
+                <div class="input-shell json-field">
+                    <label class="field-label" for="json-input">JSON input</label>
+                    <textarea id="json-input" spellcheck="false" placeholder="Paste or drop JSON here..."></textarea>
+                </div>
+                <div class="helper">
+                    <p class="helper-title">Tips for non-coders</p>
+                    <ul class="helper-list">
+                        <li>Keep files in <code>data/</code>; question numbers should be sequential.</li>
+                        <li>No data leaves your browser. Reload this page to reset.</li>
+                        <li>If JSON fails, use the sample to see the expected shape.</li>
+                    </ul>
+                </div>
+            </section>
+
+            <section class="panel stack" id="template-panel">
+                <div class="panel-head">
+                    <div>
+                        <p class="eyebrow">Template</p>
+                        <h2 class="panel-title">Layout & template source</h2>
+                    </div>
+                    <span class="chip">Default: template/base-reading.html</span>
+                </div>
+                <p class="panel-desc">
+                    The template controls the final look of your test. Pick a preset or upload your own HTML. Changing templates never alters your JSON.
+                </p>
+
+                <div>
+                    <div class="field-label">Preset templates</div>
+                    <div class="option-grid" id="template-options">
+                        <label class="option-card active">
+                            <input type="radio" name="template-choice" value="template/base-reading.html" checked>
+                            <span class="option-title">IELTS Reading</span>
+                            <span class="option-note">Standard two-panel layout (default)</span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="template-choice" value="template/base-listening.html">
+                            <span class="option-title">IELTS Listening</span>
+                            <span class="option-note">Audio-first layout (if available)</span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="template-choice" value="template/sat-reading.html">
+                            <span class="option-title">SAT Reading</span>
+                            <span class="option-note">College board style template</span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="template-choice" value="template/toeic-reading.html">
+                            <span class="option-title">TOEIC</span>
+                            <span class="option-note">Workplace-focused layout</span>
+                        </label>
+                        <label class="option-card">
+                            <input type="radio" name="template-choice" value="template/toefl-reading.html">
+                            <span class="option-title">TOEFL</span>
+                            <span class="option-note">Academic passage layout</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="template-grid">
+                    <div class="template-card">
+                        <div class="field-label">Load selected preset</div>
+                        <p class="panel-desc" style="margin: 4px 0 0;">Fetches the chosen HTML template from the template/ folder.</p>
+                        <button class="btn ghost" id="reload-template">Load preset</button>
+                    </div>
+                    <div class="template-card">
+                        <div class="field-label">Upload custom template</div>
+                        <p class="panel-desc" style="margin: 4px 0 0;">Pick a modified template file from your computer.</p>
+                        <label class="file-label btn secondary">
+                            <input type="file" id="template-input" accept=".html">
+                            <span>Select .html template</span>
+                        </label>
+                    </div>
+                </div>
+
+                <div class="inline-status">
+                    <span class="status" id="template-status">Template: loading...</span>
+                </div>
+                <div class="helper" style="margin-top: 10px;">
+                    <p class="helper-title">What is a template?</p>
+                    <ul class="helper-list">
+                        <li>It is the HTML layout for the final test (fonts, colors, structure).</li>
+                        <li>Choosing another file does not require coding; just browse to it.</li>
+                        <li>You can always come back to the default with the preset selector.</li>
+                    </ul>
+                </div>
+            </section>
+        </div>
+
+        <section class="panel hero-panel">
+            <div class="panel-head" style="align-items: flex-start;">
+                <div>
+                    <p class="eyebrow">Quick guide</p>
+                    <h1 class="panel-title xl">Generate IELTS reading tests without coding.</h1>
+                    <p class="panel-desc">
+                        Paste your JSON, pick a template, generate once. Preview opens in a new tab; download uses the same file.
+                    </p>
+                </div>
+                <div class="chip soft">Scaled for wide 16:9 workspaces.</div>
+            </div>
+            <div class="hero-grid">
+                <div class="hero-tile"><strong>Data</strong><br>Paste or upload the JSON file for your test. The tool keeps the content intact.</div>
+                <div class="hero-tile"><strong>Template</strong><br>Select IELTS Reading (default) or switch to Listening, SAT, TOEIC, TOEFL, or your own HTML.</div>
+                <div class="hero-tile"><strong>Preview</strong><br>Generate once, then open preview in a new browser tab and download the same output.</div>
             </div>
         </section>
 
-        <section class="card stack">
-            <h2>2) Generate HTML</h2>
-            <div class="row">
-                <input type="file" id="template-input" accept=".html">
-                <span class="status" id="template-hint">If file:// blocks fetch, pick template/base-reading.html here.</span>
-            </div>
-            <div class="row">
-                <button id="generate-btn">Generate file</button>
-                <span class="status" id="template-status">Template: loading...</span>
-            </div>
-            <p class="status" id="result-status"></p>
-            <div class="row" id="download-row" style="display:none;">
-                <a id="download-link" class="link" download>Download generated file</a>
-            </div>
-            <iframe id="preview-frame" title="Preview" hidden></iframe>
-        </section>
-
-        <section class="card stack">
-            <h2>JSON tips</h2>
-            <ul style="margin: 0 0 0 16px; color: var(--muted); line-height: 1.6;">
-                <li>Keep question numbers unique and sequential across all parts.</li>
-                <li>Use <code>{{number}}</code> placeholders inside summaries to create blanks.</li>
-                <li><strong>Supported types</strong>: TFNG, YNNG, MCQ, MATCH_OPTIONS, MATCH_HEADINGS, SUMMARY_COMPLETION, SUMMARY_COMPLETION_BOX, SENTENCE_COMPLETION.</li>
-                <li>Put your JSON files in <code>data/</code> to keep things tidy.</li>
+        <section class="panel">
+            <h3 class="panel-title">Quick checklist</h3>
+            <ul class="tip-list">
+                <li>Supported groups: TFNG, YNNG, MCQ, MATCH_OPTIONS, MATCH_HEADINGS, SUMMARY_COMPLETION, SUMMARY_COMPLETION_BOX, SENTENCE_COMPLETION.</li>
+                <li>Use <code>{{number}}</code> placeholders inside summaries to mark blanks.</li>
+                <li>Keep assets and templates local; the tool works fully offline.</li>
+                <li>Preview and download share the exact same generated file.</li>
             </ul>
         </section>
     </main>
@@ -164,15 +506,21 @@
         (function() {
             const jsonInput = document.getElementById('json-input');
             const fileInput = document.getElementById('file-input');
-            const generateBtn = document.getElementById('generate-btn');
             const loadSampleBtn = document.getElementById('load-sample');
+            const generateBtn = document.getElementById('generate-btn');
             const resultStatus = document.getElementById('result-status');
             const templateStatus = document.getElementById('template-status');
             const templateInput = document.getElementById('template-input');
+            const reloadTemplateBtn = document.getElementById('reload-template');
             const jsonStatus = document.getElementById('json-status');
-            const downloadLink = document.getElementById('download-link');
-            const downloadRow = document.getElementById('download-row');
-            const previewFrame = document.getElementById('preview-frame');
+            const downloadBtn = document.getElementById('download-btn');
+            const openPreviewBtn = document.getElementById('open-preview-btn');
+            const templateOptions = Array.from(document.querySelectorAll('input[name="template-choice"]'));
+            const previewNote = document.getElementById('preview-note');
+
+            let templateHtml = '';
+            let previewUrl = '';
+            let lastFileName = 'reading-output.html';
 
             const inlineSampleData = {
                 "test_id": "sample-reading-01",
@@ -194,151 +542,15 @@
                                 "type": "TFNG",
                                 "instructions": "<p><strong>Questions 1-3</strong><br>Do the following statements agree with the information given in Reading Passage 1?</p><p>In boxes 1-3 on your answer sheet, write TRUE, FALSE or NOT GIVEN.</p>",
                                 "questions": [
-                                    {
-                                        "number": 1,
-                                        "statement": "Residents wanted the benches to stay next to the car park.",
-                                        "answer": "FALSE"
-                                    },
-                                    {
-                                        "number": 2,
-                                        "statement": "New lighting allowed people to use the park later in the day.",
-                                        "answer": "TRUE"
-                                    },
-                                    {
-                                        "number": 3,
-                                        "statement": "The council planted exotic flowers to attract more visitors.",
-                                        "answer": "NOT GIVEN"
-                                    }
+                                    { "number": 1, "statement": "Residents wanted the benches to stay next to the car park.", "answer": "FALSE" },
+                                    { "number": 2, "statement": "Lighting changes encouraged people to visit in the evening.", "answer": "TRUE" },
+                                    { "number": 3, "statement": "Liem supported replacing grass with concrete paths.", "answer": "NOT GIVEN" }
                                 ]
-                            },
-                            {
-                                "type": "MATCH_OPTIONS",
-                                "instructions": "<p><strong>Questions 4-5</strong><br>Match each person with their contribution.</p><p>Choose the correct letter A-C.</p>",
-                                "options_title": "List of People",
-                                "options": [
-                                    { "label": "A", "text": "Mai, landscape student" },
-                                    { "label": "B", "text": "Liem, retired engineer" },
-                                    { "label": "C", "text": "An, lighting contractor" }
-                                ],
-                                "questions": [
-                                    {
-                                        "number": 4,
-                                        "prompt": "proposed using drought-resistant plants",
-                                        "answer": "B"
-                                    },
-                                    {
-                                        "number": 5,
-                                        "prompt": "designed a safer layout for footpaths",
-                                        "answer": "A"
-                                    }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "part": 2,
-                        "name": "Part 2",
-                        "instructions": "Read the text and answer questions 6-9.",
-                        "passage": {
-                            "title": "Rooftop Harvests",
-                            "paragraphs": [
-                                "<strong>A</strong>  Small rooftop farms now cover the older apartment blocks near the river. Residents swap seeds, compare soil mixes and share water barrels. The goal is not profit but resilience: fresh herbs and vegetables when supply chains stumble.",
-                                "<strong>B</strong>  The roofs also collect data. Moisture sensors report to a simple dashboard, letting growers see when a crop needs more shade cloth or irrigation. The arrangement convinced sceptical building owners that plants would not damage their roofs."
-                            ]
-                        },
-                        "question_groups": [
-                            {
-                                "type": "MATCH_HEADINGS",
-                                "instructions": "<p><strong>Questions 6-7</strong><br>Choose the correct heading for paragraphs A-B from the list below.</p>",
-                                "options_title": "List of Headings",
-                                "options_list_style": "lower-roman",
-                                "options": [
-                                    { "label": "i", "text": "Sharing tools and knowledge" },
-                                    { "label": "ii", "text": "Monitoring moisture with technology" },
-                                    { "label": "iii", "text": "Protecting old roofs from heavy rain" }
-                                ],
-                                "questions": [
-                                    { "number": 6, "prompt": "Paragraph A", "answer": "i" },
-                                    { "number": 7, "prompt": "Paragraph B", "answer": "ii" }
-                                ]
-                            },
-                            {
-                                "type": "SUMMARY_COMPLETION",
-                                "instructions": "<p><strong>Questions 8-9</strong><br>Complete the summary below using NO MORE THAN TWO WORDS for each answer.</p>",
-                                "paragraphs": [
-                                    "The pilot garden replaced {{8}} parking spots and added {{9}} small ponds."
-                                ],
-                                "answers": [
-                                    { "number": 8, "answer": "thirty" },
-                                    { "number": 9, "answer": ["two", "2"] }
-                                ]
-                            }
-                        ]
-                    },
-                    {
-                        "part": 3,
-                        "name": "Part 3",
-                        "instructions": "Read the text and answer questions 10-14.",
-                        "passage": {
-                            "title": "Future of Work",
-                            "paragraphs": [
-                                "When office workers stayed home during the pandemic, many teams discovered that productivity did not collapse. Some leaders worried that culture would fade, but weekly check-ins and deliberate mentoring filled part of the gap.",
-                                "Now companies are mixing approaches. New graduates often want time in the office to learn informally, while experienced staff ask for flexible schedules. The most successful experiments blend quiet focus days with structured collaboration."
-                            ]
-                        },
-                        "question_groups": [
-                            {
-                                "type": "YNNG",
-                                "instructions": "<p><strong>Questions 10-11</strong><br>Do the following statements agree with the views of the writer in Reading Passage 3?</p>",
-                                "questions": [
-                                    {
-                                        "number": 10,
-                                        "statement": "Team output fell sharply when employees first stayed home.",
-                                        "answer": "NO"
-                                    },
-                                    {
-                                        "number": 11,
-                                        "statement": "Some mentoring continued even without a physical office.",
-                                        "answer": "YES"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "MCQ",
-                                "instructions": "<p><strong>Question 12</strong><br>Choose the correct letter, A, B, C or D.</p>",
-                                "questions": [
-                                    {
-                                        "number": 12,
-                                        "question_text": "What do many new graduates want from office time?",
-                                        "options": [
-                                            { "label": "A", "text": "quieter schedules" },
-                                            { "label": "B", "text": "informal learning" },
-                                            { "label": "C", "text": "strict supervision" },
-                                            { "label": "D", "text": "shorter weeks" }
-                                        ],
-                                        "answer": "B"
-                                    }
-                                ]
-                            },
-                            {
-                                "type": "SUMMARY_COMPLETION_BOX",
-                                "instructions": "<p><strong>Questions 13-14</strong><br>Choose TWO words from the box to complete the sentences.</p>",
-                                "word_bank": ["remote", "coaching", "automation", "coworking"],
-                                "paragraphs": [
-                                    "Some teams shifted to {{13}} days while others met in {{14}} hubs."
-                                ],
-                                "answers": [
-                                    { "number": 13, "answer": "remote" },
-                                    { "number": 14, "answer": "coworking" }
-                                ],
-                                "dnd_group": "summary-3"
                             }
                         ]
                     }
                 ]
             };
-
-            let templateHtml = '';
 
             const setStatus = (el, message, tone = 'info') => {
                 el.textContent = message;
@@ -347,14 +559,44 @@
                 if (tone === 'error') el.classList.add('error');
             };
 
-            async function loadTemplate() {
+            const isValidJson = (text) => {
+                try { JSON.parse(text); return true; }
+                catch (_) { return false; }
+            };
+
+            const autoGenerateIfReady = () => {
+                if (!templateHtml) return;
+                if (!jsonInput.value.trim()) return;
+                if (!isValidJson(jsonInput.value)) return;
+                generateHtml();
+            };
+
+            const clearPreviewUrl = () => {
+                if (previewUrl) URL.revokeObjectURL(previewUrl);
+                previewUrl = '';
+                downloadBtn.disabled = true;
+                openPreviewBtn.disabled = true;
+                previewNote.textContent = 'Tip: Generate first. Preview will open the output file in a new tab.';
+            };
+
+            const getSelectedTemplate = () => {
+                const checked = templateOptions.find(opt => opt.checked);
+                return checked ? checked.value : 'template/base-reading.html';
+            };
+
+            async function loadTemplate(path) {
+                const target = path || getSelectedTemplate();
+                templateOptions.forEach(card => {
+                    card.parentElement.classList.toggle('active', card.value === target);
+                });
                 try {
-                    const res = await fetch('template/base-reading.html', { cache: 'no-store' });
+                    const res = await fetch(target, { cache: 'no-store' });
                     if (!res.ok) throw new Error(`HTTP ${res.status}`);
                     templateHtml = await res.text();
-                    setStatus(templateStatus, 'Template ready (template/base-reading.html)', 'success');
+                    setStatus(templateStatus, `Template ready (${target})`, 'success');
+                    autoGenerateIfReady();
                 } catch (err) {
-                    setStatus(templateStatus, 'Could not fetch template. If you opened file://, choose base-reading.html below.', 'error');
+                    setStatus(templateStatus, `Could not fetch template at ${target}. If opened via file:// choose a local file.`, 'error');
                 }
             }
 
@@ -369,6 +611,8 @@
                     jsonInput.value = JSON.stringify(inlineSampleData, null, 2);
                     setStatus(jsonStatus, 'Loaded built-in sample (fetch blocked on file://).', 'success');
                 }
+                clearPreviewUrl();
+                autoGenerateIfReady();
             }
 
             function handleFile(event) {
@@ -378,6 +622,8 @@
                 reader.onload = () => {
                     jsonInput.value = reader.result;
                     setStatus(jsonStatus, `Loaded ${file.name}`, 'success');
+                    clearPreviewUrl();
+                    autoGenerateIfReady();
                 };
                 reader.onerror = () => setStatus(jsonStatus, 'Could not read file.', 'error');
                 reader.readAsText(file);
@@ -390,42 +636,72 @@
                 reader.onload = () => {
                     templateHtml = reader.result;
                     setStatus(templateStatus, `Template loaded from ${file.name}`, 'success');
+                    templateOptions.forEach(card => card.parentElement.classList.remove('active'));
+                    clearPreviewUrl();
                 };
                 reader.onerror = () => setStatus(templateStatus, 'Could not read template file.', 'error');
                 reader.readAsText(file);
             }
 
+            function updateButtons(enabled) {
+                downloadBtn.disabled = !enabled;
+                openPreviewBtn.disabled = !enabled;
+            }
+
             function generateHtml() {
                 if (!templateHtml) {
                     setStatus(resultStatus, 'Template not loaded yet.', 'error');
+                    updateButtons(false);
                     return;
                 }
                 try {
                     const data = JSON.parse(jsonInput.value);
                     const { html } = window.IeltsGenerator.renderFromJson(data, templateHtml);
                     const blob = new Blob([html], { type: 'text/html' });
-                    const url = URL.createObjectURL(blob);
-                    downloadLink.href = url;
-                    downloadLink.download = `${data.test_id || 'reading-output'}.html`;
-                    downloadRow.style.display = 'flex';
-                    previewFrame.hidden = false;
-                    previewFrame.src = url;
-                    setStatus(resultStatus, `Generated ${data.test_id || 'reading-output'}.html`, 'success');
+                    if (previewUrl) URL.revokeObjectURL(previewUrl);
+                    previewUrl = URL.createObjectURL(blob);
+                    lastFileName = `${data.test_id || 'reading-output'}.html`;
+                    updateButtons(true);
+                    setStatus(resultStatus, `Generated ${lastFileName}`, 'success');
+                    previewNote.textContent = 'Ready. Click "Preview in new tab" to view the file.';
                 } catch (err) {
+                    updateButtons(false);
                     setStatus(resultStatus, err.message || 'Failed to generate file.', 'error');
+                    previewNote.textContent = 'Tip: Generate first. Preview will open the output file in a new tab.';
                 }
             }
 
+            function downloadHtml() {
+                if (!previewUrl) return;
+                const link = document.createElement('a');
+                link.href = previewUrl;
+                link.download = lastFileName;
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            }
+
+            function openPreview() {
+                if (!previewUrl) return;
+                window.open(previewUrl, '_blank', 'noopener');
+            }
+
+            templateOptions.forEach(opt => {
+                opt.addEventListener('change', () => {
+                    clearPreviewUrl();
+                    loadTemplate(opt.value);
+                });
+            });
             fileInput.addEventListener('change', handleFile);
             loadSampleBtn.addEventListener('click', loadSample);
             templateInput.addEventListener('change', handleTemplateFile);
             generateBtn.addEventListener('click', generateHtml);
+            reloadTemplateBtn.addEventListener('click', () => loadTemplate());
+            downloadBtn.addEventListener('click', downloadHtml);
+            openPreviewBtn.addEventListener('click', openPreview);
+
             loadTemplate();
         })();
     </script>
 </body>
 </html>
-
-
-
-

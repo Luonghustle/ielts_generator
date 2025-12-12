@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="vi" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IELTS Test Generator Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                        mono: ['JetBrains Mono', 'monospace'],
+                    },
+                    colors: {
+                        tech: {
+                            bg: '#0f172a', // Slate 900
+                            card: '#1e293b', // Slate 800
+                            border: '#334155', // Slate 700
+                            accent: '#06b6d4', // Cyan 500
+                            accentHover: '#0891b2', // Cyan 600
+                            text: '#f1f5f9', // Slate 100
+                            muted: '#94a3b8' // Slate 400
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: #0f172a;
+            color: #f1f5f9;
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #1e293b; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #334155; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #475569; 
+        }
+        
+        .glass-panel {
+            background: rgba(30, 41, 59, 0.7);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .step-number {
+            position: relative;
+        }
+        .step-number::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 2px;
+            height: 100%;
+            background-color: #334155;
+            z-index: -1;
+        }
+        .step-item:last-child .step-number::after {
+            display: none;
+        }
+
+        /* Input styling */
+        input:focus, select:focus, textarea:focus {
+            outline: none;
+            border-color: #06b6d4;
+            box-shadow: 0 0 0 2px rgba(6, 182, 212, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans">
+
+    <!-- Header -->
+    <header class="border-b border-tech-border bg-tech-card/80 backdrop-blur-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-cyan-500 to-blue-600 flex items-center justify-center shadow-lg shadow-cyan-500/20">
+                    <i class="fa-solid fa-layer-group text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-white">IELTS Generator <span class="text-cyan-400">Studio</span></h1>
+                    <p class="text-xs text-tech-muted">Công cụ tạo đề thi tự động v2.0</p>
+                </div>
+            </div>
+            <div class="flex gap-3">
+                <a href="https://github.com/luonghustle/ielts_generator" target="_blank" class="text-tech-muted hover:text-white transition-colors">
+                    <i class="fa-brands fa-github text-xl"></i>
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="flex-grow p-6">
+        <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-12 gap-8">
+            
+            <!-- Sidebar / Steps Guide -->
+            <div class="lg:col-span-3">
+                <div class="sticky top-24 space-y-8">
+                    <div class="step-item flex gap-4">
+                        <div class="step-number flex-shrink-0 w-8 h-8 rounded-full bg-cyan-500 text-white flex items-center justify-center font-bold z-10 shadow-lg shadow-cyan-500/30">1</div>
+                        <div class="pt-1">
+                            <h3 class="font-semibold text-white">Dữ liệu đề thi</h3>
+                            <p class="text-sm text-tech-muted mt-1">Nhập nội dung câu hỏi dưới dạng JSON.</p>
+                        </div>
+                    </div>
+                    <div class="step-item flex gap-4">
+                        <div class="step-number flex-shrink-0 w-8 h-8 rounded-full bg-tech-card border border-tech-border text-tech-muted flex items-center justify-center font-bold z-10" id="step2-indicator">2</div>
+                        <div class="pt-1">
+                            <h3 class="font-semibold text-gray-400" id="step2-text">Cấu hình</h3>
+                            <p class="text-sm text-gray-600 mt-1">Chọn giao diện hiển thị và đặt tên file.</p>
+                        </div>
+                    </div>
+                    <div class="step-item flex gap-4">
+                        <div class="step-number flex-shrink-0 w-8 h-8 rounded-full bg-tech-card border border-tech-border text-tech-muted flex items-center justify-center font-bold z-10" id="step3-indicator">3</div>
+                        <div class="pt-1">
+                            <h3 class="font-semibold text-gray-400" id="step3-text">Xuất bản</h3>
+                            <p class="text-sm text-gray-600 mt-1">Tải xuống file HTML hoàn chỉnh.</p>
+                        </div>
+                    </div>
+
+                    <!-- Helper Box -->
+                    <div class="mt-8 p-4 rounded-xl bg-gradient-to-br from-slate-800 to-slate-900 border border-tech-border">
+                        <div class="flex items-center gap-2 mb-2 text-cyan-400">
+                            <i class="fa-regular fa-lightbulb"></i>
+                            <span class="font-bold text-sm">Mẹo nhỏ</span>
+                        </div>
+                        <p class="text-xs text-tech-muted leading-relaxed">
+                            Bạn không cần biết code. Chỉ cần chuẩn bị file nội dung đúng chuẩn JSON và tool sẽ lo phần còn lại. 
+                        </p>
+                        <button onclick="loadSampleData()" class="mt-3 text-xs text-cyan-400 hover:text-cyan-300 underline underline-offset-2">
+                            Tải dữ liệu mẫu để thử
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Editor & Actions Area -->
+            <div class="lg:col-span-9 space-y-6">
+
+                <!-- STEP 1: DATA INPUT -->
+                <div class="glass-panel rounded-2xl p-6 shadow-xl">
+                    <div class="flex justify-between items-center mb-4">
+                        <h2 class="text-lg font-semibold text-white flex items-center gap-2">
+                            <i class="fa-solid fa-code text-cyan-500"></i> Dữ liệu JSON
+                        </h2>
+                        <div class="flex gap-2">
+                            <label for="fileUpload" class="cursor-pointer px-3 py-1.5 rounded-lg bg-tech-card border border-tech-border hover:bg-slate-700 text-xs text-tech-text transition-all flex items-center gap-2">
+                                <i class="fa-solid fa-upload"></i> Upload File (.json)
+                            </label>
+                            <input type="file" id="fileUpload" accept=".json" class="hidden" onchange="handleFileUpload(this)">
+                            
+                            <button onclick="formatJSON()" class="px-3 py-1.5 rounded-lg bg-tech-card border border-tech-border hover:bg-slate-700 text-xs text-tech-text transition-all" title="Làm đẹp code">
+                                <i class="fa-solid fa-wand-magic-sparkles"></i> Format
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="relative group">
+                        <textarea id="jsonInput" 
+                            class="w-full h-96 bg-[#0b1120] text-gray-300 font-mono text-sm p-4 rounded-xl border border-tech-border focus:border-cyan-500 transition-all resize-y leading-relaxed"
+                            placeholder='Paste nội dung JSON của bài thi vào đây... Ví dụ: {"title": "Reading Test 1", ...}' spellcheck="false"></textarea>
+                        
+                        <!-- Validation Status -->
+                        <div id="jsonStatus" class="absolute bottom-4 right-4 text-xs px-2 py-1 rounded bg-slate-800 border border-slate-700 hidden">
+                            <i class="fa-solid fa-check text-green-500"></i> Valid JSON
+                        </div>
+                    </div>
+                    <p class="text-xs text-red-400 mt-2 hidden" id="jsonError"><i class="fa-solid fa-triangle-exclamation mr-1"></i> Lỗi cú pháp JSON. Vui lòng kiểm tra lại.</p>
+                </div>
+
+                <!-- STEP 2: CONFIGURATION -->
+                <div class="glass-panel rounded-2xl p-6 shadow-xl">
+                    <h2 class="text-lg font-semibold text-white mb-6 flex items-center gap-2">
+                        <i class="fa-solid fa-sliders text-cyan-500"></i> Cấu hình hiển thị
+                    </h2>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <!-- Template Selection -->
+                        <div>
+                            <label class="block text-sm font-medium text-tech-muted mb-2">Chọn giao diện (Template)</label>
+                            <div class="relative">
+                                <select id="templateSelect" class="w-full bg-tech-bg border border-tech-border text-white rounded-lg p-3 pr-10 appearance-none focus:ring-2 focus:ring-cyan-500/50 cursor-pointer" onchange="updateTemplateInfo()">
+                                    <option value="base-reading.html">Reading Standard (Cơ bản)</option>
+                                    <option value="base-listening.html" disabled>Listening Standard (Sắp ra mắt)</option>
+                                    <option value="modern-reading.html" disabled>Reading Modern (Sắp ra mắt)</option>
+                                </select>
+                                <div class="absolute inset-y-0 right-0 flex items-center px-3 pointer-events-none text-tech-muted">
+                                    <i class="fa-solid fa-chevron-down text-xs"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- Template Info Box -->
+                            <div class="mt-3 p-3 bg-blue-500/10 border border-blue-500/20 rounded-lg">
+                                <div class="flex items-start gap-2">
+                                    <i class="fa-solid fa-info-circle text-blue-400 mt-1 text-xs"></i>
+                                    <div>
+                                        <p class="text-xs text-blue-200 font-semibold" id="tplName">Reading Standard</p>
+                                        <p class="text-[11px] text-blue-300/80 mt-1" id="tplDesc">Giao diện chuẩn cho bài thi đọc, chia đôi màn hình (trái: bài đọc, phải: câu hỏi).</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Filename Input -->
+                        <div>
+                            <label class="block text-sm font-medium text-tech-muted mb-2">Tên file xuất ra</label>
+                            <div class="relative">
+                                <input type="text" id="outputFilename" 
+                                    class="w-full bg-tech-bg border border-tech-border text-white rounded-lg p-3 pl-10 focus:ring-2 focus:ring-cyan-500/50" 
+                                    placeholder="reading-test-01">
+                                <div class="absolute inset-y-0 left-0 flex items-center px-3 pointer-events-none text-tech-muted">
+                                    <i class="fa-solid fa-file-code"></i>
+                                </div>
+                                <span class="absolute inset-y-0 right-0 flex items-center px-3 text-tech-muted text-sm bg-slate-800 rounded-r-lg border-l border-tech-border">
+                                    .html
+                                </span>
+                            </div>
+                            <p class="text-xs text-tech-muted mt-2">Đặt tên file không dấu, ví dụ: <code class="bg-slate-800 px-1 py-0.5 rounded text-cyan-400">test-reading-01</code></p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- STEP 3: ACTION -->
+                <div class="flex flex-col gap-4">
+                    <button onclick="generateTest()" 
+                        class="group relative w-full bg-gradient-to-r from-cyan-600 to-blue-600 hover:from-cyan-500 hover:to-blue-500 text-white font-bold py-4 rounded-xl shadow-lg shadow-cyan-500/20 transition-all transform hover:-translate-y-0.5 active:translate-y-0 overflow-hidden">
+                        <div class="absolute inset-0 bg-white/20 group-hover:translate-x-full transition-transform duration-700 -skew-x-12 -ml-4 w-1/2 h-full z-0"></div>
+                        <span class="relative z-10 flex items-center justify-center gap-3 text-lg">
+                            <i class="fa-solid fa-bolt"></i> TẠO BÀI THI NGAY
+                        </span>
+                    </button>
+
+                    <div id="resultArea" class="hidden animate-fade-in-up">
+                        <div class="p-4 bg-green-500/10 border border-green-500/30 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">
+                                    <i class="fa-solid fa-check"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-green-400">Thành công!</h4>
+                                    <p class="text-xs text-green-200/70">File đã sẵn sàng để tải xuống.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-2">
+                                <a id="previewBtn" href="#" target="_blank" class="px-4 py-2 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-sm font-medium transition-colors border border-slate-600">
+                                    <i class="fa-solid fa-eye mr-1"></i> Xem trước
+                                </a>
+                                <a id="downloadBtn" href="#" download class="px-4 py-2 rounded-lg bg-green-600 hover:bg-green-500 text-white text-sm font-medium transition-colors shadow-lg shadow-green-900/20">
+                                    <i class="fa-solid fa-download mr-1"></i> Tải về
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </main>
+    
+    <footer class="border-t border-tech-border mt-8 py-6 text-center text-tech-muted text-sm">
+        <p>&copy; 2025 IELTS Generator Tool. Designed for simplicity.</p>
+    </footer>
+
+    <!-- Logic Script -->
+    <script>
+        // --- 1. Utility Functions ---
+        
+        function getEl(id) { return document.getElementById(id); }
+
+        function showNotification(msg, type = 'info') {
+            // Simple toast logic could go here, for now using alert/console or status divs
+            // In a real refined UI, a toast library is better.
+            console.log(`[${type.toUpperCase()}] ${msg}`);
+        }
+
+        function validateJSON(text) {
+            try {
+                if (!text.trim()) return false;
+                JSON.parse(text);
+                return true;
+            } catch (e) {
+                return false;
+            }
+        }
+
+        // --- 2. Event Handlers ---
+
+        // Auto-validate on input
+        getEl('jsonInput').addEventListener('input', function() {
+            const val = this.value;
+            const errorEl = getEl('jsonError');
+            const statusEl = getEl('jsonStatus');
+            
+            if (val.trim() === '') {
+                errorEl.classList.add('hidden');
+                statusEl.classList.add('hidden');
+                this.classList.remove('border-red-500', 'border-green-500');
+                return;
+            }
+
+            if (validateJSON(val)) {
+                errorEl.classList.add('hidden');
+                statusEl.classList.remove('hidden');
+                this.classList.remove('border-red-500', 'border-tech-border');
+                this.classList.add('border-green-500/50');
+                updateStepsUI(2); // Activate step 2 visually
+            } else {
+                errorEl.classList.remove('hidden');
+                statusEl.classList.add('hidden');
+                this.classList.remove('border-green-500/50', 'border-tech-border');
+                this.classList.add('border-red-500');
+            }
+        });
+
+        function handleFileUpload(input) {
+            const file = input.files[0];
+            if (!file) return;
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                getEl('jsonInput').value = e.target.result;
+                // Trigger input event to validate
+                getEl('jsonInput').dispatchEvent(new Event('input'));
+                formatJSON(); // Auto format on upload
+            };
+            reader.readAsText(file);
+        }
+
+        function formatJSON() {
+            const input = getEl('jsonInput');
+            try {
+                const obj = JSON.parse(input.value);
+                input.value = JSON.stringify(obj, null, 4);
+                input.dispatchEvent(new Event('input'));
+            } catch (e) {
+                alert("JSON lỗi, không thể format được. Vui lòng kiểm tra cú pháp.");
+            }
+        }
+
+        function updateTemplateInfo() {
+            const select = getEl('templateSelect');
+            const nameEl = getEl('tplName');
+            const descEl = getEl('tplDesc');
+            
+            const selected = select.options[select.selectedIndex];
+            nameEl.textContent = selected.text;
+            
+            // Mock descriptions
+            if(select.value.includes('reading')) {
+                descEl.textContent = "Giao diện chuẩn cho bài thi đọc. Tối ưu cho màn hình Desktop và Tablet với bố cục chia đôi.";
+            } else {
+                descEl.textContent = "Giao diện bài thi nghe (Đang phát triển).";
+            }
+        }
+        
+        // Visual cue for steps
+        function updateStepsUI(step) {
+            if(step >= 2) {
+                getEl('step2-indicator').classList.remove('bg-tech-card', 'text-tech-muted', 'border-tech-border');
+                getEl('step2-indicator').classList.add('bg-cyan-500', 'text-white', 'border-cyan-500');
+                getEl('step2-text').classList.remove('text-gray-400');
+                getEl('step2-text').classList.add('text-white');
+            }
+            if(step >= 3) {
+                getEl('step3-indicator').classList.remove('bg-tech-card', 'text-tech-muted', 'border-tech-border');
+                getEl('step3-indicator').classList.add('bg-cyan-500', 'text-white', 'border-cyan-500');
+                getEl('step3-text').classList.remove('text-gray-400');
+                getEl('step3-text').classList.add('text-white');
+            }
+        }
+
+        function loadSampleData() {
+            const sample = {
+                "title": "Sample Reading Test",
+                "reading_passage": "<p>This is a sample reading passage generated by the tool...</p>",
+                "questions": [
+                    {
+                        "id": 1,
+                        "type": "multiple_choice",
+                        "question_text": "What is the main idea?",
+                        "options": ["A", "B", "C", "D"]
+                    }
+                ]
+            };
+            getEl('jsonInput').value = JSON.stringify(sample, null, 4);
+            getEl('jsonInput').dispatchEvent(new Event('input'));
+        }
+
+        // --- 3. Core Generation Logic ---
+
+        async function generateTest() {
+            const jsonContent = getEl('jsonInput').value;
+            const templateName = getEl('templateSelect').value;
+            let filename = getEl('outputFilename').value.trim() || 'ielts-test';
+
+            if (!validateJSON(jsonContent)) {
+                alert("Vui lòng nhập dữ liệu JSON hợp lệ trước khi tạo.");
+                getEl('jsonInput').focus();
+                return;
+            }
+
+            // Update UI Steps
+            updateStepsUI(3);
+
+            try {
+                // Determine template path. 
+                // Note: In a real serverless/static environment, we need to fetch the file.
+                // Assuming 'template/' directory exists relative to this file as per user structure.
+                const templatePath = `template/${templateName}`;
+                
+                // Fetch the template HTML
+                const response = await fetch(templatePath);
+                if (!response.ok) {
+                    throw new Error(`Không tìm thấy template tại: ${templatePath}. Hãy chắc chắn bạn đang chạy tool đúng thư mục.`);
+                }
+                
+                let html = await response.text();
+
+                // MERGE LOGIC: Replace placeholder with actual JSON
+                // The standard placeholder in many such tools is often just a script tag variable
+                // Or a specific string like {{DATA}}. 
+                // Based on standard practices for this user's likely setup:
+                const dataInjection = `const testData = ${jsonContent};`;
+                
+                // We look for a marker in the template, usually inside a <script> tag 
+                // If the template expects "const testData = ...", we replace that or inject it.
+                // A safe bet for a generic generator is to look for a specific comment or known variable.
+                // Let's assume the template has `const testData = null;` or similar.
+                
+                // Simple strategy: Inject at the end of head or before body close if specific marker not found.
+                // Or verify if template has specific placeholder. 
+                // Since I can't see the template content right now, I will use a robust replacement strategy:
+                // Look for 'const testData = ' and replace until semicolon.
+                
+                if (html.includes('const testData =')) {
+                    // Regex to replace the variable definition
+                    html = html.replace(/const testData =[\s\S]*?;/, dataInjection);
+                } else {
+                    // Fallback: Inject script before </body>
+                    const scriptTag = `<script>\n${dataInjection}\n<\/script>`;
+                    html = html.replace('</body>', `${scriptTag}\n</body>`);
+                }
+
+                // Create Blob
+                const blob = new Blob([html], { type: 'text/html' });
+                const url = URL.createObjectURL(blob);
+
+                // Update Result UI
+                const downloadBtn = getEl('downloadBtn');
+                const previewBtn = getEl('previewBtn');
+                const resultArea = getEl('resultArea');
+
+                // Ensure filename ends with .html
+                if (!filename.toLowerCase().endsWith('.html')) {
+                    filename += '.html';
+                }
+
+                downloadBtn.href = url;
+                downloadBtn.download = filename;
+                
+                previewBtn.href = url;
+
+                resultArea.classList.remove('hidden');
+                
+                // Scroll to result
+                resultArea.scrollIntoView({ behavior: 'smooth' });
+
+            } catch (err) {
+                console.error(err);
+                alert("Lỗi khi tạo bài thi: " + err.message);
+            }
+        }
+    </script>
+</body>
+</html>
